@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\Марина\Source\Repos\Infosec\Dnevnik\App.xaml
-3-913295218
+4-1376876518
 
-9698456253
+11766016507
 131569487696
-View\CreateEntityWindow.xaml;View\Login.xaml;View\MainWindow.xaml;
+View\CreateEntityWindow.xaml;View\LoginWindow.xaml;View\MainWindow.xaml;View\RegistrationWindow.xaml;
 
-True
+False
 

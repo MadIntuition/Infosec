@@ -39,7 +39,7 @@ namespace Dnevnik
 
         private void LoginMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Login login = new Login();
+            LoginWindow login = new LoginWindow();
             this.Close();
             login.ShowDialog();
         }
