@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Марина\Source\Repos\Infosec\Dnevnik\obj\Debug\
+C:\Users\koctu\Source\Repos\Infosec\Dnevnik\obj\Debug\
 Dnevnik
 none
 false
 DEBUG;TRACE
-C:\Users\Марина\Source\Repos\Infosec\Dnevnik\App.xaml
-4-1376876518
+C:\Users\koctu\Source\Repos\Infosec\Dnevnik\App.xaml
+5-285374428
 
-11766016507
-131569487696
-View\CreateEntityWindow.xaml;View\LoginWindow.xaml;View\MainWindow.xaml;View\RegistrationWindow.xaml;
+17574473396
+171631546673
+View\CreateEntityWindow.xaml;View\InstanceOfEntity.xaml;View\LoginWindow.xaml;View\MainWindow.xaml;View\RegistrationWindow.xaml;
 
 False
 
