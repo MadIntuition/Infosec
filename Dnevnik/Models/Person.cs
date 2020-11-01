@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace Dnevnik
 {
-    [Table("Person")]
+    //[Table("Person")]
     public class Person : INotifyPropertyChanged
     {
         [Key]
@@ -16,12 +16,12 @@ namespace Dnevnik
 
         private string firstName;
         private string lastName;
-        private DateTime dateOfBirth;
+        private DateTime dateOfBirth = DateTime.Now;
         private bool isSmart;
         private bool isSingle;
-        private int telephone;
+        private Int64 telephone;
         //[Required]
-        [DisplayName("Name")]
+        [DisplayName("Firsttt Name")]
         public string FirstName
         {
             get { return firstName; }
@@ -42,7 +42,12 @@ namespace Dnevnik
         }
         public DateTime DateOfBirth
         {
-            get { return dateOfBirth; }
+            get 
+            {
+                //if (String.IsNullOrEmpty(dateOfBirth.ToString()))
+                //    dateOfBirth = DateTime.Now;
+                return dateOfBirth; 
+            }
             set
             {
                 dateOfBirth = value;
@@ -67,7 +72,7 @@ namespace Dnevnik
                 OnPropertyChanged("IsSingle");
             }
         }
-        public int Telephone
+        public Int64 Telephone
         {
             get { return telephone; }
             set

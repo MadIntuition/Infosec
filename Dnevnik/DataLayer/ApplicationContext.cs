@@ -13,9 +13,10 @@ namespace Dnevnik
         {
             //ConfigurationManager.AppSettings["DefaultConnection"]
         }
-        public DbSet<Entities> Entities { get; set; }
+        public DbSet<Entity> Entities { get; set; }
 
         public DbSet<Person> People { get; set; }
-        //public DbSet<What> What { get; set; }
+        
+        public DbSet<What> Whats { get; set; }
     }
 }

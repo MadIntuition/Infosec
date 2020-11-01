@@ -70,12 +70,16 @@
     <Compile Include="Models\Entities.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\What.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="ViewModels\ApplicationViewModel.cs" />
+    <Compile Include="ViewModels\PeopleApplicationViewModel.cs" />
     <Compile Include="View\CreateEntityWindow.xaml.cs">
       <DependentUpon>CreateEntityWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\EntityViewModel.cs" />
+    <Compile Include="View\CreateInstanceOfEntityWindow.xaml.cs">
+      <DependentUpon>CreateInstanceOfEntityWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\InstanceOfEntity.xaml.cs">
       <DependentUpon>InstanceOfEntity.xaml</DependentUpon>
     </Compile>
@@ -83,6 +87,10 @@
       <DependentUpon>RegistrationWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="View\CreateEntityWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CreateInstanceOfEntityWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

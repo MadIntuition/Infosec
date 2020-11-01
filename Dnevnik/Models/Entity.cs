@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dnevnik
 {
-    public class Entity
+    public class NewEntity
     {
         [DisplayName("Название")]        
         public string FieldName { get; set; }

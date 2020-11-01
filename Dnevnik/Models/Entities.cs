@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace Dnevnik
 {
-    [Table("Entities")]
-    public class Entities : INotifyPropertyChanged
+    //[Table("Entities")]
+    public class Entity : INotifyPropertyChanged
     {
         [Key]
         public int ID_Entity { get; set; }

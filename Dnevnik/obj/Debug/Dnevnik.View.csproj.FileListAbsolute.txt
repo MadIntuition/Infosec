@@ -103,4 +103,6 @@ C:\Users\koctu\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.View.csproj.CoreCo
 C:\Users\koctu\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.View.csproj.CopyComplete
 C:\Users\koctu\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.exe
 C:\Users\koctu\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.pdb
+C:\Users\koctu\Source\Repos\Infosec\Dnevnik\obj\Debug\View\CreateInstanceOfEntityWindow.g.cs
+C:\Users\koctu\Source\Repos\Infosec\Dnevnik\obj\Debug\View\CreateInstanceOfEntityWindow.baml
 C:\Users\koctu\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.View.csprojAssemblyReference.cache
