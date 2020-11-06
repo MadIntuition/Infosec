@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.Entity;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,12 +25,20 @@ namespace Dnevnik
     /// </summary>
     public partial class MainWindow : Window
     {
+        ApplicationContext db = new ApplicationContext();
+        public IEnumerable<Entity> Entities { get; set; }
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();             
+            //this.DataContext = new ApplicationViewModel();
+
+            db.Entities.Load();
+            Entities = db.Entities.Local.ToBindingList();
+            this.entitiesListBox.ItemsSource = Entities;
+
         }
 
-
+       
         private void CreateTypeButton_Click(object sender, RoutedEventArgs e)
         {
             CreateEntityWindow createEntityWindow = new CreateEntityWindow();
@@ -35,7 +47,6 @@ namespace Dnevnik
             createEntityWindow.ShowDialog();
             
         }
-
 
         private void LoginMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -48,5 +59,6 @@ namespace Dnevnik
         {
             Close();
         }
+                
     }
 }
