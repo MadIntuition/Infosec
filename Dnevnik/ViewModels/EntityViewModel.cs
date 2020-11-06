@@ -10,12 +10,12 @@ namespace Dnevnik
 {
     class EntityViewModel
     {
-        private ObservableCollection<Entity> _entity;
+        private ObservableCollection<NewEntity> _entity;
         public EntityViewModel()
         {
-            _entity = new ObservableCollection<Entity>();
+            _entity = new ObservableCollection<NewEntity>();
         }
         
-        public ObservableCollection<Entity> Entity => _entity;
+        public ObservableCollection<NewEntity> Entity => _entity;
     }
 }

@@ -1,30 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dnevnik
+namespace Dnevnik.ViewModels
 {
-    //[Table("Entities")]
-    public class Entity : INotifyPropertyChanged
+    public class GeneralViewModel : INotifyPropertyChanged
     {
-        [Key]
-        public int ID_Entity { get; set; }
-        
-        private string entityName;
+        private IEnumerable<Entity> entities;
 
-        public string EntityName
+        public IEnumerable<Entity> Entities
         {
-            get { return entityName; }
+            get { return entities; }
             set
             {
-                entityName = value;
-                OnPropertyChanged("EntityName");
+                entities = value;
+                OnPropertyChanged("Entities");
             }
         }
 
@@ -34,7 +28,5 @@ namespace Dnevnik
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
-
-
     }
 }

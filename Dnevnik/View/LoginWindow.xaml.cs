@@ -19,16 +19,44 @@ namespace Dnevnik
     /// </summary>
     public partial class LoginWindow : Window
     {
+        AuthorizedUsersViewModel viewModel;
+        AuthorizedUser user;
         public LoginWindow()
         {
             InitializeComponent();
+            viewModel = new AuthorizedUsersViewModel();
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string login = LogintextBox.Text,
-                password = PasswordBox.Password;
-            if (login == "" && password == "")
+            string enteredlogin = LogintextBox.Text,
+                enteredpassword = PasswordBox.Password;
+
+            user = viewModel.GetByLogin(enteredlogin);
+
+            if (user != null)
+            {
+                CheckCredentials(user, enteredlogin, enteredpassword);
+            }
+            else
+            {
+                MessageBox.Show("Неверный логин или пароль. Попробуйте снова.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+
+        private void RegistrationButton_Click(object sender, RoutedEventArgs e)
+        {
+            LogintextBox.Text = String.Empty;
+            PasswordBox.Password = String.Empty;
+            RegistrationWindow registrationWindow = new RegistrationWindow();
+            registrationWindow.ShowDialog();
+        }
+
+
+        public void CheckCredentials(AuthorizedUser user, string enteredLogin, string enteredPassword)
+        {
+            if (user.Login == enteredLogin && user.Password == enteredPassword)
             {
                 warningLabel.Visibility = Visibility.Hidden;
                 MainWindow mainWindow = new MainWindow();
@@ -38,15 +66,8 @@ namespace Dnevnik
             else
             {
                 warningLabel.Visibility = Visibility.Visible;
-                //MessageBox.Show("Неверный логин или пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                
             }
-        }
-
-        private void RegistrationButton_Click(object sender, RoutedEventArgs e)
-        {
-            RegistrationWindow registrationWindow = new RegistrationWindow();
-            //this.Close();
-            registrationWindow.ShowDialog();
         }
     }
 }

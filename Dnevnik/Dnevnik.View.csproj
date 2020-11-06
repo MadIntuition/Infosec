@@ -67,12 +67,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataLayer\ApplicationContext.cs" />
-    <Compile Include="Models\Entities.cs" />
+    <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\AuthorizedUser.cs" />
     <Compile Include="Models\What.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="ViewModels\PeopleApplicationViewModel.cs" />
+    <Compile Include="ViewModels\ApplicationViewModel.cs" />
+    <Compile Include="ViewModels\AuthorizedUsersViewModel.cs" />
+    <Compile Include="ViewModels\GeneralViewModel.cs" />
     <Compile Include="View\CreateEntityWindow.xaml.cs">
       <DependentUpon>CreateEntityWindow.xaml</DependentUpon>
     </Compile>
@@ -123,7 +125,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\NewEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

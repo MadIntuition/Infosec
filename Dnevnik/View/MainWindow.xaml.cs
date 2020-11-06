@@ -26,14 +26,19 @@ namespace Dnevnik
     public partial class MainWindow : Window
     {
         ApplicationContext db = new ApplicationContext();
+        public IEnumerable<Entity> Entities { get; set; }
         public MainWindow()
         {
             InitializeComponent();             
-            this.DataContext = new PeopleApplicationViewModel();
+            //this.DataContext = new ApplicationViewModel();
+
+            db.Entities.Load();
+            Entities = db.Entities.Local.ToBindingList();
+            this.entitiesListBox.ItemsSource = Entities;
+
         }
 
        
-
         private void CreateTypeButton_Click(object sender, RoutedEventArgs e)
         {
             CreateEntityWindow createEntityWindow = new CreateEntityWindow();
@@ -42,7 +47,6 @@ namespace Dnevnik
             createEntityWindow.ShowDialog();
             
         }
-
 
         private void LoginMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -55,7 +59,6 @@ namespace Dnevnik
         {
             Close();
         }
-
-        
+                
     }
 }

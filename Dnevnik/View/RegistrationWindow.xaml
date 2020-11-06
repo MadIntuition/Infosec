@@ -51,7 +51,7 @@
         </TextBox>
 
         <TextBlock Text="Фамилия" Grid.Column="1" Grid.Row="2" />
-        <TextBox x:Name="LastnameTextBox" Grid.Column="3" Grid.Row="2" 
+        <TextBox x:Name="LastNameTextBox" Grid.Column="3" Grid.Row="2" 
                  Margin="0,5" MaxLength="50" Validation.ErrorTemplate="{StaticResource validationFailed}" >
             <TextBox.Text>
                 <Binding Path="LastName">
@@ -63,7 +63,7 @@
         </TextBox>
         
         <TextBlock Text="Дата рождения" Grid.Column="1" Grid.Row="3" />
-        <DatePicker Grid.Column="3" Grid.Row="3" />
+        <DatePicker x:Name="date" Grid.Column="3" Grid.Row="3" />
         
         <TextBlock Text="Логин" Grid.Column="1" Grid.Row="4" />
         <TextBox x:Name="LoginTextBox" Grid.Column="3" Grid.Row="4" 

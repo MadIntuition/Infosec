@@ -16,10 +16,10 @@ namespace Dnevnik
 
         private string firstName;
         private string lastName;
-        private DateTime dateOfBirth = DateTime.Now;
-        private bool isSmart;
-        private bool isSingle;
-        private Int64 telephone;
+        private string dateOfBirth;
+        private string address;
+        private string eyecolor;
+        private string telephone;
         //[Required]
         [DisplayName("Firsttt Name")]
         public string FirstName
@@ -40,7 +40,7 @@ namespace Dnevnik
                 OnPropertyChanged("LastName");
             }
         }
-        public DateTime DateOfBirth
+        public string DateOfBirth
         {
             get 
             {
@@ -54,25 +54,25 @@ namespace Dnevnik
                 OnPropertyChanged("DateOfBirth");
             }
         }
-        public bool IsSmart
+        public string Address
         {
-            get { return isSmart; }
+            get { return address; }
             set
             {
-                isSmart = value;
+                address = value;
                 OnPropertyChanged("IsSmart");
             }
         }
-        public bool IsSingle
+        public string EyeColor
         {
-            get { return isSingle; }
+            get { return eyecolor; }
             set
             {
-                isSingle = value;
+                eyecolor = value;
                 OnPropertyChanged("IsSingle");
             }
         }
-        public Int64 Telephone
+        public string Telephone
         {
             get { return telephone; }
             set

@@ -41,14 +41,13 @@ namespace Dnevnik
 
 
     }
-    public class PeopleApplicationViewModel : INotifyPropertyChanged
+    public class ApplicationViewModel : INotifyPropertyChanged
     {
         ApplicationContext db;
         RelayCommand addCommand;
         RelayCommand editCommand;
         RelayCommand deleteCommand;
         IEnumerable<Person> people;
-
         public IEnumerable<Person> People
         {
             get { return people; }
@@ -58,7 +57,7 @@ namespace Dnevnik
                 OnPropertyChanged("People");
             }
         }
-        public PeopleApplicationViewModel()
+        public ApplicationViewModel()
         {
             db = new ApplicationContext();
             db.People.Load();
@@ -102,8 +101,8 @@ namespace Dnevnik
                           FirstName = person.FirstName,
                           LastName = person.LastName,
                           DateOfBirth = person.DateOfBirth,
-                          IsSmart = person.IsSmart,
-                          IsSingle = person.IsSingle,
+                          Address = person.Address,
+                          EyeColor = person.EyeColor,
                           Telephone = person.Telephone
                       };
                       CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow(new_person);
@@ -118,8 +117,8 @@ namespace Dnevnik
                               person.FirstName = createInstance.Person.FirstName;
                               person.LastName = createInstance.Person.LastName;
                               person.DateOfBirth = createInstance.Person.DateOfBirth;
-                              person.IsSmart = createInstance.Person.IsSmart;
-                              person.IsSingle = createInstance.Person.IsSingle;
+                              person.Address = createInstance.Person.Address;
+                              person.EyeColor = createInstance.Person.EyeColor;
                               person.Telephone = createInstance.Person.Telephone;
 
                               db.Entry(person).State = EntityState.Modified;

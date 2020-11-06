@@ -53,11 +53,11 @@
 
         <!--Body-->
         <!--Left ListBox for Types-->
-        <ListBox Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" ItemsSource="{Binding Entities}">
+        <ListBox x:Name="entitiesListBox" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"> <!--ItemsSource="{Binding Entities}-->
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
-                        <TextBlock FontSize="18" Text="{Binding EntityName}" />
+                        <TextBlock x:Name="entityItemTextBlock" FontSize="18" Text="{Binding EntityName}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -66,7 +66,7 @@
 
         <!--Right ListBox for SubTypes SelectedItem="{Binding SelectedPhone}"-->
         <ListBox Grid.Column="3" Grid.Row="3" Grid.RowSpan="1" Grid.ColumnSpan="4" 
-                 x:Name="instancesList" ItemsSource="{Binding People}">
+                 x:Name="instancesListBox" ItemsSource="{Binding People}">
 
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">

@@ -18,5 +18,8 @@ namespace Dnevnik
         public DbSet<Person> People { get; set; }
         
         public DbSet<What> Whats { get; set; }
+
+        public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
+        
     }
 }

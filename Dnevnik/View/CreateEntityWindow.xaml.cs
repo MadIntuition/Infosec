@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,7 @@ namespace Dnevnik
     /// </summary>
     public partial class CreateEntityWindow : Window
     {
+        public IEnumerable<NewEntity> Entities;
         public CreateEntityWindow()
         {
             InitializeComponent();
@@ -35,5 +37,17 @@ namespace Dnevnik
             }
         }
 
+        public IEnumerable<NewEntity> getData()
+        {
+            Entities = newEntityFieldsGrid.ItemsSource as IEnumerable<NewEntity>;
+
+            return Entities;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            getData();
+            this.Close();
+        }
     }
 }

@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Dnevnik
 {
-    public class User : IDataErrorInfo
+    public class AuthorizedUser : IDataErrorInfo
     {
+        [Key]
+        public int UserID { get; set; }
         [DisplayName("Имя")]
         public string Name { get; set; }
         [DisplayName("Фамилия")]
@@ -26,14 +29,17 @@ namespace Dnevnik
             {
                 string error = String.Empty;
                 switch (columnName)
-                {
-                    case "Age":
-                        //smth
-                        break;
+                {                    
                     case "Name":
                         //Обработка ошибок для свойства Name
                         break;
-                    case "Position":
+                    case "LastName":
+                        //smth
+                        break;
+                    case "Login":
+                        //Обработка ошибок для свойства Position
+                        break;
+                    case "Password":
                         //Обработка ошибок для свойства Position
                         break;
                 }
