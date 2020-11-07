@@ -1,0 +1,38 @@
+﻿<Window x:Class="WpfAppTestList.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfAppTestList"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="548.992" Width="886.453">
+    <Grid>
+        <ListView x:Name="FieldsList" HorizontalAlignment="Left" Height="400" Margin="10,10,0,0" VerticalAlignment="Top" Width="600">
+            <ListView.View>
+                <GridView>
+
+
+                    <GridViewColumn Header="Наименование поля сущности" Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Title}" TextWrapping="Wrap" Margin="2" Width="250"
+                         Foreground="Black" ></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Name="FieldsValues" Header="Значение поля" Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox  Text="{Binding Path=FValue}" TextWrapping="Wrap" Margin="2" Width="250"
+                         Foreground="Black" ></TextBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="СОХРАНИТЬ&#xD;&#xA;" HorizontalAlignment="Left" Margin="30,434,0,0" VerticalAlignment="Top" Width="567" Height="57" Click="Button_Click"/>
+        <TextBox x:Name="TestTextBox" HorizontalAlignment="Left" Height="300" Margin="645,13,0,0" TextWrapping="Wrap" Text="Тест&#xD;&#xA;" VerticalAlignment="Top" Width="187"/>
+
+    </Grid>
+</Window>
