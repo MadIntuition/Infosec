@@ -83,15 +83,14 @@
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\AuthorizedUser.cs" />
-    <Compile Include="Models\What.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="dontNeed_ViewModels\ApplicationViewModel.cs" />
-    <Compile Include="dontNeed_ViewModels\AuthorizedUsersViewModel.cs" />
-    <Compile Include="dontNeed_ViewModels\GeneralViewModel.cs" />
+    <Compile Include="ViewModels\EntitiesViewModel.cs" />
+    <Compile Include="ViewModels\AuthorizedUsersViewModel.cs" />
+    <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="View\CreateEntityWindow.xaml.cs">
       <DependentUpon>CreateEntityWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="dontNeed_ViewModels\EntityViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModel.cs" />
     <Compile Include="View\CreateInstanceOfEntityWindow.xaml.cs">
       <DependentUpon>CreateInstanceOfEntityWindow.xaml</DependentUpon>
     </Compile>

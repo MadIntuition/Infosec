@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dnevnik"
         mc:Ignorable="d"
-        Title="Создать новый элемент" Height="310" Width="400" WindowStartupLocation="CenterScreen">
+        Title="Документ" Height="483.943" Width="318.46" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="5" />
@@ -23,44 +23,33 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="0.7*" />
+            <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Имя" Grid.Column="1" Grid.Row="1"/>
-        <TextBlock Text="Фамилия" Grid.Column="1" Grid.Row="2" />
-        <TextBlock Text="Дата рождения" Grid.Column="1" Grid.Row="3" />
-        <TextBlock Text="Смарт?" Grid.Column="1" Grid.Row="4" />
-        <TextBlock Text="Сингл?" Grid.Column="1" Grid.Row="5" />
-        <TextBlock Text="Телефончик" Grid.Column="1" Grid.Row="6" />
+        <DataGrid x:Name="documentDataGrid" Grid.Row="1" Grid.Column="1" 
+                  Grid.ColumnSpan="3">
+            <DataGrid.Columns>
+                <DataGridTextColumn IsReadOnly="True" Header="Название поля" />
+                <DataGridTextColumn Header="Значение" />
+            </DataGrid.Columns>
+        </DataGrid>
 
-        <TextBox Text="{Binding FirstName}" Grid.Column="3" Grid.Row="1"/>
-        <TextBox Text="{Binding LastName}" Grid.Column="3" Grid.Row="2" />
-        <DatePicker SelectedDate="3/23/09" SelectedDateFormat="Short" Text="{Binding DateOfBirth}" Grid.Column="3" Grid.Row="3" />
-        
-        <CheckBox IsChecked="{Binding IsSmart}" Grid.Column="3" Grid.Row="4" />
-        <CheckBox IsChecked="{Binding IsSingle}" Grid.Column="3" Grid.Row="5" />
-        <TextBox Text="{Binding Telephone}" Grid.Column="3" Grid.Row="6" />
-
-        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" 
-                    Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4">
-            <Button x:Name="Accept" IsDefault="True" MinWidth="60" Margin="5" Click="Accept_Click">OK</Button>
-            <Button IsCancel="True" MinWidth="60" Margin="5">Отмена</Button>
-        </StackPanel>
+        <!--<StackPanel HorizontalAlignment="Center" Orientation="Horizontal" 
+                    Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4">-->
+        <Button x:Name="Accept" Grid.Row="3" Grid.Column="1" IsDefault="True" 
+                Click="Accept_Click">OK</Button>
+        <Button x:Name="Cancel" IsCancel="True" Grid.Row="3" Grid.Column="3" Click="Cancel_Click">Отмена</Button>
+        <!--</StackPanel>-->
 
 
     </Grid>

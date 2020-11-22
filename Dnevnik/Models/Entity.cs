@@ -11,12 +11,12 @@ namespace Dnevnik
     //[Table("Entities")]
     public class Entity : INotifyPropertyChanged
     {
-        [Key]
-        public int ID_Entity { get; set; }
+        
+        //public int ID_Entity { get; set; }
 
         private string entityName;
         private string annotationFields;
-
+        [Key]
         public string EntityName
         {
             get { return entityName; }
@@ -35,18 +35,6 @@ namespace Dnevnik
                 OnPropertyChanged("AnnotationFields");
             }
         }
-        //private Dictionary<string, string> entity;
-
-
-        //public Dictionary<string, string> EntityName
-        //{
-        //    get { return entity; }
-        //    set
-        //    {
-        //        entity = value;
-        //        OnPropertyChanged("EntityName");
-        //    }
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

@@ -25,18 +25,20 @@ namespace Dnevnik
     /// </summary>
     public partial class MainWindow : Window
     {
-        ApplicationContext db = new ApplicationContext();
+        Database db;
+        EntitiesViewModel viewModel;
         private static string _userLogin;
-        public IEnumerable<Entity> Entities { get; set; }
+        ///ApplicationContext db = new ApplicationContext();
+        //public IEnumerable<string> Entities { get; set; }
         public MainWindow(string userLogin)
         {
             InitializeComponent();
             _userLogin = userLogin;
 
-            //this.DataContext = new ApplicationViewModel();
-            //db.Entities.Load();
-            //Entities = db.Entities.Local.ToBindingList();
-            //this.entitiesListBox.ItemsSource = Entities;
+            viewModel = new EntitiesViewModel(userLogin);
+            
+            //DataContext = new Database(userLogin);
+            this.entitiesListBox.ItemsSource = db.GetEntities();
         }
 
 

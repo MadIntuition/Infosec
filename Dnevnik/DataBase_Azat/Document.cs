@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Dnevnik
 {
-    class Document
+    public class Document
     {
         public OrderedDictionary Fields { get; set; }
         public int[] AnnotationFields { get; set; }

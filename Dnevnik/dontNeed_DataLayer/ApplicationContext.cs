@@ -9,15 +9,16 @@ namespace Dnevnik
 {
     public class ApplicationContext : DbContext
     {
-        public ApplicationContext() : base("DefaultConnection")
+        Database db;
+        public ApplicationContext(string fileName) : base()
         {
             //ConfigurationManager.AppSettings["DefaultConnection"]
+            db = new Database(fileName);
         }
         public DbSet<Entity> Entities { get; set; }
 
-        public DbSet<Person> People { get; set; }
         
-        public DbSet<What> Whats { get; set; }
+        public DbSet<Document> Documents { get; set; }
 
         public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
         
