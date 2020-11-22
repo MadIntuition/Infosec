@@ -55,12 +55,21 @@ namespace Dnevnik
                 yield return field.FieldName;
             }
         }
+        public IEnumerable<string> getImportantFieldsNames()
+        {
+            List<NewEntity> fieldsCollection = getData().ToList();
+
+            foreach (var field in fieldsCollection)
+            {
+                if (field.Importance)
+                    yield return field.FieldName;
+            }
+        }
 
         private void CreateEntity_Click(object sender, RoutedEventArgs e)
         {
             bool success =
-            db.CreateNewEntity(EntityName.Text, getFieldsNames());
-            //getData();
+            db.CreateNewEntity(EntityName.Text, getFieldsNames());//+getImportantFieldsNames()
             if (success)
             {
                 MessageBox.Show("Успешный успех", "Ура!", MessageBoxButton.OK, MessageBoxImage.Information);

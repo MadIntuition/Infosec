@@ -19,18 +19,22 @@ namespace Dnevnik
     /// </summary>
     public partial class CreateInstanceOfEntityWindow : Window
     {
-        public Person Person { get; private set; }
-        public CreateInstanceOfEntityWindow(Person p)
+        //public Person Person { get; private set; }
+        public CreateInstanceOfEntityWindow()//Person p)
         {
             InitializeComponent();
-            Person = p;
-            this.DataContext = Person;
+            //Person = p;
+            //this.DataContext = Person;
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
+            //this.DialogResult = true;
         }
 
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

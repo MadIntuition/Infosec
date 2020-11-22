@@ -46,7 +46,7 @@ namespace Dnevnik
             
             if (IsAuthorized)
             {
-                MainWindow mainWindow = new MainWindow(LogintextBox.Text);
+                MainWindow mainWindow = new MainWindow(GetUserDB);
                 this.Close();
                 mainWindow.ShowDialog();                
             }
