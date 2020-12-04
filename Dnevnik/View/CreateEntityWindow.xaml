@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dnevnik"
         mc:Ignorable="d"
-        Title="Create New Entity" Height="431.302" Width="331.867" WindowStartupLocation="CenterScreen">
+        Title="Create New Entity" Height="449.969" Width="331.867" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -13,7 +13,7 @@
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -21,9 +21,10 @@
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Введите названия полей:"/>
-        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,5" Text="Введите название сущности:"/>
-        <TextBox x:Name="EntityName" Grid.Column="1" Margin="166,5,0,5" Grid.Row="2" ></TextBox>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="Введите названия полей:"/>
+        <Label x:Name="WarningLabel" Grid.Row="0" Grid.Column="1" FontSize="14" Foreground="#FFFF1700" FontFamily="Calibri"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="Введите название сущности:"/>
+        <TextBox x:Name="EntityName" Grid.Row="1" Grid.Column="1" Margin="166,0,0,5"  ></TextBox>
 
         <DataGrid x:Name="newEntityFieldsGrid" Grid.Row="3" Grid.Column="1"  AutoGenerateColumns="True" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" 
           ItemsSource="{Binding Entity}" Margin="0,5">

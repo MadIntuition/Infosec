@@ -12,19 +12,23 @@ namespace Dnevnik
 {    
     public class EntitiesViewModel : INotifyPropertyChanged
     {
-        ApplicationContext _context;
+        //ApplicationContext _context;
         Database db;
         RelayCommand addCommand;
         RelayCommand editCommand;
         RelayCommand deleteCommand;
         IEnumerable<Entity> entities;
         private Entity selectedEntity;
+        private string _userName;
 
         public EntitiesViewModel(string fileName)
         {
-            _context = new ApplicationContext(fileName);
-            _context.Entities.Load();
-            Entities = _context.Entities.Local.ToBindingList();
+            _userName = fileName;
+            //_context = new ApplicationContext(fileName);
+            //_context.Entities.Load();
+            //Entities = _context.Entities.Local.ToBindingList();
+            db = new Database(fileName + ".sqlite");
+            //SelectedEntity = new Entity("OMG");
         }
         
         
@@ -33,7 +37,7 @@ namespace Dnevnik
             get { return entities; }
             set
             {
-                entities = value;
+                entities = GetEntities();
                 OnPropertyChanged("Entities");
             }
         }
@@ -57,13 +61,13 @@ namespace Dnevnik
                 };
             }
         }
-        public IEnumerable<Document> GetDocuments()
-        {
-            foreach (string entity in db.GetEntityFieldList())
-            {
+        //public IEnumerable<Document> GetDocuments()
+        //{
+        //    foreach (string entity in db.GetEntityFieldList())
+        //    {
                
-            }
-        }
+        //    }
+        //}
         
 
         // команда добавления
@@ -75,7 +79,7 @@ namespace Dnevnik
                   (addCommand = new RelayCommand((o) =>
                   {
                       //это окно для Документа, при помощи которого можно создать новый или отредактировать имеющийся
-                      CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow();
+                      CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow(SelectedEntity, _userName);
 
                       if (createInstance.ShowDialog() == true)
                       {

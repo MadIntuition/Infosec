@@ -25,20 +25,34 @@ namespace Dnevnik
     /// </summary>
     public partial class MainWindow : Window
     {
-        Database db;
-        EntitiesViewModel viewModel;
+        //Database db;
+        EntitiesViewModel entityViewModel;
+        DocumentViewModel docViewModel;
         private static string _userLogin;
         ///ApplicationContext db = new ApplicationContext();
-        //public IEnumerable<string> Entities { get; set; }
+        public List<Entity> Entities { get; set; }
         public MainWindow(string userLogin)
         {
             InitializeComponent();
             _userLogin = userLogin;
 
-            viewModel = new EntitiesViewModel(userLogin);
-            
-            //DataContext = new Database(userLogin);
-            this.entitiesListBox.ItemsSource = db.GetEntities();
+            entityViewModel = new EntitiesViewModel(userLogin);
+            UserLogin.Header = $"хей йо, {userLogin} ";
+
+            Entities = entityViewModel.GetEntities().ToList();
+            //this.DataContext = entityViewModel;
+            //this.DataContext = Entities;
+            this.entitiesListBox.ItemsSource = Entities;
+
+            //---------------
+            docViewModel = new DocumentViewModel(userLogin);
+            //if (!String.IsNullOrEmpty(entityViewModel.SelectedEntity.EntityName))
+            //{
+            //    var data = GetList(entityViewModel.SelectedEntity.EntityName);
+            //    this.DataContext = data;
+            //    this.instancesListBox.ItemsSource = data;
+            //}
+                
         }
 
 
@@ -48,7 +62,8 @@ namespace Dnevnik
             createEntityWindow.Owner = this;
 
             createEntityWindow.ShowDialog();
-            
+            Entities = entityViewModel.GetEntities().ToList();
+            this.entitiesListBox.ItemsSource = Entities;
         }
 
         private void LoginMenuItem_Click(object sender, RoutedEventArgs e)
@@ -62,6 +77,17 @@ namespace Dnevnik
         {
             Close();
         }
-                
+
+        public List<Field> GetList(string tableName)
+        {
+            //var data = db.GetEntityFieldListNEW(tableName);
+
+            List<Field> dict = new List<Field>
+            {
+                new Field("field1"), new Field("field2"), new Field("field3"), new Field("field4"), new Field("field5"),
+                new Field("field6"), new Field("field7")
+            };
+            return dict;
+        }
     }
 }

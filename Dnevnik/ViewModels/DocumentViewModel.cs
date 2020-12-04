@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dnevnik.ViewModels
+namespace Dnevnik
 {
     public class DocumentViewModel : INotifyPropertyChanged
     {
@@ -16,13 +16,15 @@ namespace Dnevnik.ViewModels
         RelayCommand editCommand;
         RelayCommand deleteCommand;
         IEnumerable<Document> documents;
-        private Entity selectedEntity;
+        private Entity selectedDocument;
 
         public DocumentViewModel(string fileName)
         {
             db = new Database(fileName);
+            
+
         }
-                
+        
         public IEnumerable<Document> Documents
         {
             get { return documents; }
@@ -33,13 +35,13 @@ namespace Dnevnik.ViewModels
             }
         }
 
-        public Entity SelectedEntity
+        public Entity SelectedDocument
         {
-            get { return selectedEntity; }
+            get { return selectedDocument; }
             set
             {
-                selectedEntity = value;
-                OnPropertyChanged("SelectedEntity");
+                selectedDocument = value;
+                OnPropertyChanged("SelectedDocument");
             }
         }
         public IEnumerable<Entity> GetEntities()
@@ -52,30 +54,17 @@ namespace Dnevnik.ViewModels
                 };
             }
         }
-        public IEnumerable<Document> GetDocuments(string tableTitle, int[] annotationFields)
-        {
-            //здесь должен быть метод, который возвращает IEnumerable<Document>
 
-            //db.GetEntityFieldList(tableTitle, annotationFields);
-            //foreach (var entity in ...)
-            //{
+        //public IEnumerable<Document> GetDocuments(string tableTitle, int[] annotationFields)
+        //{
+        //    //здесь должен быть метод, который возвращает IEnumerable<Document>
 
-            //}
-        }
+        //    //db.GetEntityFieldList(tableTitle, annotationFields);
+        //    //foreach (var entity in ...)
+        //    //{
 
-
-
-        private IEnumerable<Entity> entities;
-
-        public IEnumerable<Entity> Entities
-        {
-            get { return entities; }
-            set
-            {
-                entities = value;
-                OnPropertyChanged("Entities");
-            }
-        }
+        //    //}
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -84,4 +73,6 @@ namespace Dnevnik.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
+    
+    
 }

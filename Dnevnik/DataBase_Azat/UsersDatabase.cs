@@ -85,15 +85,20 @@ namespace Dnevnik
         public bool Authorize(string login, string password)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            using (SQLiteCommand command = new SQLiteCommand("select form users where login=@login and password=@password", connection))
+            using (SQLiteCommand command = new SQLiteCommand("select * from users where login=@login and password=@password", connection))
             {
                 try
                 {
                     connection.Open();
                     command.Parameters.AddWithValue("@login", login);
                     command.Parameters.AddWithValue("@password", HashPassword(password));
-                    command.ExecuteScalar();
-                    return true;
+                    //command.ExecuteScalar();
+                    //return true;
+                    string exists = Convert.ToString(command.ExecuteScalar());
+                    if (!String.IsNullOrEmpty(exists))
+                        return true;
+                    else
+                        return false;
 
                 }
                 catch (SQLiteException ex)

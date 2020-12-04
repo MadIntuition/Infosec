@@ -140,3 +140,7 @@ C:\Users\TitovaM2\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.View.csproj.Cor
 C:\Users\TitovaM2\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.View.csproj.CopyComplete
 C:\Users\TitovaM2\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.exe
 C:\Users\TitovaM2\Source\Repos\Infosec\Dnevnik\obj\Debug\Dnevnik.pdb
+C:\Users\koctu\Source\Repos\Infosec\Dnevnik\bin\Debug\System.Data.SQLite.dll
+C:\Users\koctu\Source\Repos\Infosec\Dnevnik\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\koctu\Source\Repos\Infosec\Dnevnik\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\koctu\Source\Repos\Infosec\Dnevnik\bin\Debug\System.Data.SQLite.xml

@@ -11,7 +11,14 @@ namespace Dnevnik
     //[Table("Entities")]
     public class Entity : INotifyPropertyChanged
     {
-        
+        public Entity(string entityName)
+        {
+            EntityName = entityName;
+        }
+        public Entity()
+        {
+            
+        }
         //public int ID_Entity { get; set; }
 
         private string entityName;

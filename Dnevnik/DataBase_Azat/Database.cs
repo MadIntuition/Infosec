@@ -44,8 +44,8 @@ namespace Dnevnik
             if (exists)
                 return false;
 
-            query = "create table " + tableTitle;// + " (" + string.Join(", ", fieldsNames.Select(x => x + " text").Prepend("id integer primary key autoincrement")) + ")";
-            return ExecuteNonQuery(query) > 0;
+            query = "create table " + tableTitle + " (id integer primary key autoincrement, " + string.Join(", ", fieldsNames.Select(x => x + " text")) + ")";
+            return ExecuteNonQuery(query) >= 0;
         }
 
         public DataTable GetEntityFieldList(string tableTitle, int[] annotationFields)
@@ -53,10 +53,23 @@ namespace Dnevnik
             string query = "select * from " + tableTitle;
             return ReadRows(query, annotationFields);
         }
+        /// <summary>
+        /// tried to get the list
+        /// </summary>
+        /// <param name="tableTitle"></param>
+        /// <returns></returns>
+        public object GetEntityFieldListNEW(string tableTitle)
+        {
+            string query = $"select name from pragma_table_info('{tableTitle}')";
+            var data = ExecuteScalar(query);
+            return data;
+        }
+        
 
         public IEnumerable<string> GetEntities()
         {
-            string query = "select * from sqlite_master where type='table'";
+            //string query = "select * from sqlite_master where type='table'";
+            string query = "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'";
             return ReadRows(query, 0).AsEnumerable().Select(row => row.Field<string>(0));
         }
 
@@ -151,7 +164,7 @@ namespace Dnevnik
                 {
                     connection.Open();
                     command.Parameters.AddRange(parameters);
-                    MessageBox.Show(command.CommandText.ToString());
+                    //MessageBox.Show(command.CommandText.ToString());
                     res = command.ExecuteNonQuery();
                 }
                 catch (SQLiteException ex)
@@ -172,7 +185,7 @@ namespace Dnevnik
                 {
                     connection.Open();
                     command.Parameters.AddRange(parameters);
-                    MessageBox.Show(command.CommandText.ToString());
+                    //MessageBox.Show(command.CommandText.ToString());
                     res = command.ExecuteScalar();
                 }
                 catch (SQLiteException ex)

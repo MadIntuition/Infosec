@@ -45,7 +45,7 @@ namespace Dnevnik
             else
             {
                 LoginTextBox.BorderBrush = Brushes.Red;
-                LoginTextBox.BorderThickness = new Thickness(10);
+                LoginTextBox.BorderThickness = new Thickness(3);
                 MessageBox.Show("Пользователь с таким логином уже существует, выберите другой логин.",
                     "Упс!", MessageBoxButton.OK, MessageBoxImage.Information);
             }       

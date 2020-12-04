@@ -28,6 +28,15 @@ namespace Dnevnik
             Surname = surname;
             DateOfBirth = dateOfBirth;
         }
+        public User(string login, string password)
+        {
+            Db = null;
+            Login = login;
+            Password = password;
+            Name = "-";
+            Surname = "-";
+            DateOfBirth = new DateTime();
+        }
 
         public void CreateDatabase()
         {

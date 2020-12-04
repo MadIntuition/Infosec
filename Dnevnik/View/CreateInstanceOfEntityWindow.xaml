@@ -36,13 +36,37 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <DataGrid x:Name="documentDataGrid" Grid.Row="1" Grid.Column="1" 
+        <!--<DataGrid x:Name="documentDataGrid" Grid.Row="1" Grid.Column="1" 
                   Grid.ColumnSpan="3">
             <DataGrid.Columns>
                 <DataGridTextColumn IsReadOnly="True" Header="Название поля" />
                 <DataGridTextColumn Header="Значение" />
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
+
+        <ListView x:Name="FieldsList"  Grid.Row="1" Grid.Column="1" 
+                  Grid.ColumnSpan="3"  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn x:Name="FieldsNames" Header="Наименование поля " >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Title}" TextWrapping="Wrap" Margin="2" 
+                                            Foreground="Black" ></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn x:Name="FieldsValues" Header="Значение поля" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox  Text="{Binding Path=FValue}" TextWrapping="Wrap" Margin="2" Padding="3"
+                                            Foreground="Black" ></TextBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
         <!--<StackPanel HorizontalAlignment="Center" Orientation="Horizontal" 
                     Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4">-->

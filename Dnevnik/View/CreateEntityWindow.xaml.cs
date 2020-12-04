@@ -27,7 +27,7 @@ namespace Dnevnik
         {
             InitializeComponent();
             newEntityFieldsGrid.DataContext = new EntityViewModel();
-            db = new Database(userLogin);
+            db = new Database(userLogin+".sqlite");
         }
 
         // This snippet is much safer in terms of preventing unwanted
@@ -49,36 +49,90 @@ namespace Dnevnik
         public IEnumerable<string> getFieldsNames()
         {
             List<NewEntity> fieldsCollection = getData().ToList();
-
-            foreach (var field in fieldsCollection)
+            if (fieldsCollection.Count == 0)
+                WarningLabel.Content = "заполни таблицу э";
+            //MessageBox.Show("заполни таблицу  э", "!", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
             {
-                yield return field.FieldName;
+                foreach (var field in fieldsCollection)
+                {
+                    yield return field.FieldName;
+                }
             }
+            
         }
         public IEnumerable<string> getImportantFieldsNames()
         {
             List<NewEntity> fieldsCollection = getData().ToList();
-
+            
             foreach (var field in fieldsCollection)
             {
                 if (field.Importance)
                     yield return field.FieldName;
             }
         }
+        public bool[] getImportantFields()
+        {
+            List<NewEntity> fieldsCollection = getData().ToList();
+
+            bool[] mas = new bool[fieldsCollection.Count()];
+            int i = 0;
+            foreach (var field in fieldsCollection)
+            {
+                if (field.Importance)
+                    mas[i] = true;
+                else
+                    mas[i] = false;
+
+                i++;
+            }
+            return mas;
+        }
 
         private void CreateEntity_Click(object sender, RoutedEventArgs e)
         {
-            bool success =
-            db.CreateNewEntity(EntityName.Text, getFieldsNames());//+getImportantFieldsNames()
+            try
+            {
+                if (String.IsNullOrEmpty(EntityName.Text))
+                {
+                    EntityName.BorderBrush = Brushes.Red;
+                    EntityName.BorderThickness = new Thickness(3);
+                    WarningLabel.Content = "название сущности то уж напиши ";
+
+                }
+                else
+                {
+                    WarningLabel.Content = "";
+                    EntityName.BorderThickness = new Thickness(1);
+                    EntityName.BorderBrush = Brushes.Gray;
+                    if (getFieldsNames().Count() != 0)
+                    {
+                        if  (getImportantFieldsNames().Count() != 0) 
+                            CreateNewEntity();
+                        else
+                            WarningLabel.Content = "выбери хотяб одно важное поле";
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("што-то пошло не так", "не ура", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            
+        }
+
+        private void CreateNewEntity()
+        {
+            bool success = db.CreateNewEntity(EntityName.Text, getFieldsNames());//+getImportantFieldsNames()
             if (success)
             {
                 MessageBox.Show("Успешный успех", "Ура!", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
             }
             else
             {
                 MessageBox.Show("што-то пошло не так", "не ура", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            this.Close();
         }
     }
 }

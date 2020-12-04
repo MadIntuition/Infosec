@@ -81,6 +81,7 @@
     <Compile Include="DataBase_Azat\UsersDatabase.cs" />
     <Compile Include="dontNeed_DataLayer\ApplicationContext.cs" />
     <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\Field.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\AuthorizedUser.cs" />
     <Compile Include="RelayCommand.cs" />

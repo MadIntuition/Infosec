@@ -18,13 +18,34 @@ namespace Dnevnik
     /// Interaction logic for CreateInstanceOfEntity.xaml
     /// </summary>
     public partial class CreateInstanceOfEntityWindow : Window
-    {
-        //public Person Person { get; private set; }
-        public CreateInstanceOfEntityWindow()//Person p)
+    {   
+        Database db;
+        public CreateInstanceOfEntityWindow(Entity entity, string userName)
         {
             InitializeComponent();
-            //Person = p;
-            //this.DataContext = Person;
+            db = new Database(userName);
+            var data = GetList(entity.EntityName);
+
+            this.FieldsList.ItemsSource = data;
+            
+        }
+        
+        public CreateInstanceOfEntityWindow(Document document)
+        {
+            InitializeComponent();
+            //this.FieldsList.ItemsSource = GetList();
+        }
+
+        public List<Field> GetList(string tableName)
+        {
+            //var data = db.GetEntityFieldListNEW(tableName);
+
+            List<Field> dict = new List<Field> 
+            {
+                new Field("field1"), new Field("field2"), new Field("field3"), new Field("field4"), new Field("field5"),
+                new Field("field6"), new Field("field7")
+            };
+            return dict;
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
