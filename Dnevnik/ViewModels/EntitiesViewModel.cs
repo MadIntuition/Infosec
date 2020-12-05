@@ -18,7 +18,7 @@ namespace Dnevnik
         RelayCommand editCommand;
         RelayCommand deleteCommand;
         IEnumerable<Entity> entities;
-        private Entity selectedEntity;
+        private Entity selectedEntity = new Entity();
         private string _userName;
 
         public EntitiesViewModel(string fileName)
@@ -30,17 +30,19 @@ namespace Dnevnik
             db = new Database(fileName + ".sqlite");
             //SelectedEntity = new Entity("OMG");
         }
+
+
+        public ObservableCollection<Entity> Entities { get; set; }
         
-        
-        public IEnumerable<Entity> Entities
-        {
-            get { return entities; }
-            set
-            {
-                entities = GetEntities();
-                OnPropertyChanged("Entities");
-            }
-        }
+        //public IEnumerable<Entity> Entities
+        //{
+        //    get { return entities; }
+        //    set
+        //    {
+        //        entities = GetEntities();
+        //        OnPropertyChanged("Entities");
+        //    }
+        //}
 
         public Entity SelectedEntity
         {
@@ -61,14 +63,8 @@ namespace Dnevnik
                 };
             }
         }
-        //public IEnumerable<Document> GetDocuments()
-        //{
-        //    foreach (string entity in db.GetEntityFieldList())
-        //    {
-               
-        //    }
-        //}
         
+
 
         // команда добавления
         public RelayCommand AddCommand

@@ -31,21 +31,22 @@ namespace Dnevnik
         private static string _userLogin;
         ///ApplicationContext db = new ApplicationContext();
         public List<Entity> Entities { get; set; }
+        public List<DocumentView> Documents { get; set; }
         public MainWindow(string userLogin)
         {
             InitializeComponent();
             _userLogin = userLogin;
 
             entityViewModel = new EntitiesViewModel(userLogin);
-            UserLogin.Header = $"хей йо, {userLogin} ";
+            UserLogin.Header = $"Привет, {userLogin}! Дорогой друг";
 
             Entities = entityViewModel.GetEntities().ToList();
-            //this.DataContext = entityViewModel;
-            //this.DataContext = Entities;
             this.entitiesListBox.ItemsSource = Entities;
 
             //---------------
             docViewModel = new DocumentViewModel(userLogin);
+
+            //
             //if (!String.IsNullOrEmpty(entityViewModel.SelectedEntity.EntityName))
             //{
             //    var data = GetList(entityViewModel.SelectedEntity.EntityName);
@@ -54,7 +55,17 @@ namespace Dnevnik
             //}
                 
         }
-
+        //вызывается при нажатии на одну из сущностей из списка
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            
+            var item = sender as ListViewItem;
+            if (item != null)// && item.IsSelected)
+            {
+                Entity entity = (Entity)item.Content;
+                this.instancesListBox.ItemsSource = docViewModel.GetDocuments(entity.EntityName);
+            }
+        }
 
         private void CreateTypeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -88,6 +99,11 @@ namespace Dnevnik
                 new Field("field6"), new Field("field7")
             };
             return dict;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
@@ -55,16 +57,20 @@ namespace Dnevnik
             }
         }
 
-        //public IEnumerable<Document> GetDocuments(string tableTitle, int[] annotationFields)
-        //{
-        //    //здесь должен быть метод, который возвращает IEnumerable<Document>
-
-        //    //db.GetEntityFieldList(tableTitle, annotationFields);
-        //    //foreach (var entity in ...)
-        //    //{
-
-        //    //}
-        //}
+        public List<DocumentView> GetDocuments(string tableTitle)
+        {
+            //здесь метод, который возвращает 
+            List<DocumentView> list = new List<DocumentView>();
+            DocumentView docView = new DocumentView();
+            docView.EntityName = tableTitle;
+            var docs = db.GetEntityAnnotationFieldList(tableTitle);
+            foreach (DictionaryEntry doc in docs)
+            {
+                docView.AnnotationFields += String.Format("{0}: {1}. ", doc.Key, doc.Value);
+            }
+            list.Add(docView);
+            return list;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

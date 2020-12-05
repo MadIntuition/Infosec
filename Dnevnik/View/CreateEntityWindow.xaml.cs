@@ -123,7 +123,7 @@ namespace Dnevnik
 
         private void CreateNewEntity()
         {
-            bool success = db.CreateNewEntity(EntityName.Text, getFieldsNames());//+getImportantFieldsNames()
+            bool success = db.CreateNewEntity(EntityName.Text, getFieldsNames(), getImportantFields());//+getImportantFieldsNames()
             if (success)
             {
                 MessageBox.Show("Успешный успех", "Ура!", MessageBoxButton.OK, MessageBoxImage.Information);
