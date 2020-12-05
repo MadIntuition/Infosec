@@ -52,8 +52,8 @@ namespace WpfApp1
             if (exists)
                 return false;
 
-            query = $"create table {tableTitle} (" + string.Join(", ", fieldsNames.Select(x => x + " text").Prepend("id integer primary key autoincrement")) + ")"; //", primary key (" + string.Join(", ", fieldsNames.Where((x, i) => annotationFields[i]).Prepend("id")) + "))";
-            bool executed = ExecuteNonQuery(query) > 0;
+            query = $"create table {tableTitle} (id integer primary key autoincrement, " + string.Join(", ", fieldsNames.Select(x => x + " text")) + ")";
+            bool executed = ExecuteNonQuery(query);
             string annotationFieldsMask = "";
             for (int i = 0; i < annotationFields.Length; i++)
             {
@@ -62,7 +62,7 @@ namespace WpfApp1
             query = $"insert into tablesInfo (name, annotationFields) values (@name, @annotationFields)";
             SQLiteParameter parameter2 = new SQLiteParameter("@name", tableTitle);
             SQLiteParameter parameter3 = new SQLiteParameter("@annotationFields", annotationFieldsMask);
-            executed = ExecuteNonQuery(query, parameter2, parameter3) > 0;
+            executed = ExecuteNonQuery(query, parameter2, parameter3);
 
             return executed;
         }
@@ -118,12 +118,13 @@ namespace WpfApp1
                     {
                         if (reader.HasRows)
                         {
+                            table.Columns.Add(reader.GetName(0));
+
                             for (int i = 1; i < reader.FieldCount; i++)
                             {
                                 if (annotationFieldsMask == null || annotationFieldsMask[i - 1] == '1')
                                 {
-                                    DataColumn column = new DataColumn(reader.GetName(i));
-                                    table.Columns.Add(column);
+                                    table.Columns.Add(reader.GetName(i));
                                 }
                             }
                         }
@@ -134,7 +135,7 @@ namespace WpfApp1
                         {
                             DataRow row = table.NewRow();
                             reader.GetValues(values);
-                            row.ItemArray = values.Where((x, i) => annotationFieldsMask == null || (i > 0 && annotationFieldsMask[i - 1] == '1')).ToArray();
+                            row.ItemArray = values.Where((x, i) => i == 0 || annotationFieldsMask == null || (i > 0 && annotationFieldsMask[i - 1] == '1')).ToArray();
                             table.Rows.Add(row);
                         }
                     }
@@ -157,7 +158,7 @@ namespace WpfApp1
             {
                 parameters[i] = new SQLiteParameter(DbType.String, doc.Fields[i]);
             }
-            return ExecuteNonQuery(query, parameters) > 0;
+            return ExecuteNonQuery(query, parameters);
         }
 
         public bool EditDocument(string tableTitle, int id, Document doc)
@@ -170,19 +171,19 @@ namespace WpfApp1
             {
                 parameters[i] = new SQLiteParameter(DbType.String, doc.Fields[i - 1]);
             }
-            return ExecuteNonQuery(query, parameters) > 0;
+            return ExecuteNonQuery(query, parameters);
         }
 
         public bool DeleteDocument(string tableTitle, int id)
         {
             string query = $"delete from {tableTitle} where id=@id";
             SQLiteParameter parameter = new SQLiteParameter("@id", id);
-            return ExecuteNonQuery(query, parameter) > 0;
+            return ExecuteNonQuery(query, parameter);
         }
 
-        private int ExecuteNonQuery(string query, params SQLiteParameter[] parameters)
+        private bool ExecuteNonQuery(string query, params SQLiteParameter[] parameters)
         {
-            int res = 0;
+            bool success = false;
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             using (SQLiteCommand command = new SQLiteCommand(query, connection))
             {
@@ -191,13 +192,14 @@ namespace WpfApp1
                     connection.Open();
                     command.Parameters.AddRange(parameters);
                     //MessageBox.Show(command.CommandText.ToString());
-                    res = command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
+                    success = true;
                 }
                 catch (SQLiteException ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-                return res;
+                return success;
             }
         }
 
