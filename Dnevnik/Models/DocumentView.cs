@@ -11,32 +11,44 @@ namespace Dnevnik
 {
     public class DocumentView: INotifyPropertyChanged
     {
-        public DocumentView()
+        public DocumentView(int id, string entityName, string annotationFields)
         {
-
+            DocumentID = id;
+            EntityName = entityName;
+            AnnotationFields = annotationFields;
         }
-
-        private string entityName;
-        private string annotationFields;
+        private int _documentID;
+        private string _entityName;
+        private string _annotationFields;
         [Key]
-        public string EntityName
+        public int DocumentID
         {
-            get { return entityName; }
+            get { return _documentID; }
             set
             {
-                entityName = value;
+                _documentID = value;
+                OnPropertyChanged("DocumentID");
+            }
+        }
+        public string EntityName
+        {
+            get { return _entityName; }
+            set
+            {
+                _entityName = value;
                 OnPropertyChanged("EntityName");
             }
         }
         public string AnnotationFields
         {
-            get { return annotationFields; }
+            get { return _annotationFields; }
             set
             {
-                annotationFields = value;
+                _annotationFields = value;
                 OnPropertyChanged("AnnotationFields");
             }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

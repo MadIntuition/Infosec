@@ -27,7 +27,7 @@ namespace Dnevnik
             //_context = new ApplicationContext(fileName);
             //_context.Entities.Load();
             //Entities = _context.Entities.Local.ToBindingList();
-            db = new Database(fileName + ".sqlite");
+            db = new Database(fileName);
             //SelectedEntity = new Entity("OMG");
         }
 
@@ -75,7 +75,7 @@ namespace Dnevnik
                   (addCommand = new RelayCommand((o) =>
                   {
                       //это окно для Документа, при помощи которого можно создать новый или отредактировать имеющийся
-                      CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow(SelectedEntity, _userName);
+                      CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow(SelectedEntity.ToString(), _userName);
 
                       if (createInstance.ShowDialog() == true)
                       {

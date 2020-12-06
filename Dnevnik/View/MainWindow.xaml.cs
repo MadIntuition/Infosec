@@ -38,19 +38,19 @@ namespace Dnevnik
             _userLogin = userLogin;
 
             entityViewModel = new EntitiesViewModel(userLogin);
-            UserLogin.Header = $"Привет, {userLogin}! Дорогой друг";
+            UserLogin.Header = $"Привет, {userLogin}!";
 
             Entities = entityViewModel.GetEntities().ToList();
             this.entitiesListBox.ItemsSource = Entities;
 
             //---------------
-            docViewModel = new DocumentViewModel(userLogin);
+            
 
             //
             //if (!String.IsNullOrEmpty(entityViewModel.SelectedEntity.EntityName))
             //{
             //    var data = GetList(entityViewModel.SelectedEntity.EntityName);
-            //    this.DataContext = data;
+            
             //    this.instancesListBox.ItemsSource = data;
             //}
                 
@@ -63,8 +63,16 @@ namespace Dnevnik
             if (item != null)// && item.IsSelected)
             {
                 Entity entity = (Entity)item.Content;
-                this.instancesListBox.ItemsSource = docViewModel.GetDocuments(entity.EntityName);
+                //for Adding new Docs
+                docViewModel = new DocumentViewModel(_userLogin, entity.EntityName);
+                this.DataContext = docViewModel;
+                
+
+                var data = docViewModel.GetDocumentsForMainWindow(entity.EntityName);
+                this.instancesListBox.ItemsSource = data;
             }
+
+            
         }
 
         private void CreateTypeButton_Click(object sender, RoutedEventArgs e)
@@ -101,9 +109,5 @@ namespace Dnevnik
             return dict;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

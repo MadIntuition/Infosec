@@ -21,7 +21,7 @@ namespace Dnevnik
         public Database(string fileName)
         {
             this.fileName = fileName;
-            connectionString = $"Data Source={fileName};Version=3;";
+            connectionString = $"Data Source={fileName}.sqlite;Version=3;";
         }
 
         public void CreateFile()
@@ -45,26 +45,61 @@ namespace Dnevnik
 
         public bool CreateNewEntity(string tableTitle, IEnumerable<string> fieldsNames, bool[] annotationFields)
         {
-            string query = $"select exists (select 1 from tablesInfo where name=@name)";
-            SQLiteParameter parameter = new SQLiteParameter("@name", tableTitle);
-
-            bool exists = Convert.ToBoolean(ExecuteScalar(query, parameter));
-            if (exists)
-                return false;
-
-            query = $"create table {tableTitle} (id integer primary key autoincrement, " + string.Join(", ", fieldsNames.Select(x => x + " text")) + ")";
-            bool executed = ExecuteNonQuery(query);
-            string annotationFieldsMask = "";
-            for (int i = 0; i < annotationFields.Length; i++)
+            try
             {
-                annotationFieldsMask += annotationFields[i] ? '1' : '0';
-            }
-            query = $"insert into tablesInfo (name, annotationFields) values (@name, @annotationFields)";
-            SQLiteParameter parameter2 = new SQLiteParameter("@name", tableTitle);
-            SQLiteParameter parameter3 = new SQLiteParameter("@annotationFields", annotationFieldsMask);
-            executed = ExecuteNonQuery(query, parameter2, parameter3);
+                string query = $"select exists (select * from tablesInfo where name=@name)";
+                SQLiteParameter parameter = new SQLiteParameter("@name", tableTitle);
 
-            return executed;
+                bool exists = Convert.ToBoolean(ExecuteScalar(query, parameter));
+                if (exists)
+                    return false;
+
+                query = $"create table {tableTitle} (id integer primary key autoincrement, " + string.Join(", ", fieldsNames.Select(x => x + " text")) + ")";
+                bool executed = ExecuteNonQuery(query);
+                string annotationFieldsMask = "";
+                for (int i = 0; i < annotationFields.Length; i++)
+                {
+                    annotationFieldsMask += annotationFields[i] ? '1' : '0';
+                }
+                query = $"insert into tablesInfo (name, annotationFields) values (@name, @annotationFields)";
+                SQLiteParameter parameter2 = new SQLiteParameter("@name", tableTitle);
+                SQLiteParameter parameter3 = new SQLiteParameter("@annotationFields", annotationFieldsMask);
+                executed = ExecuteNonQuery(query, parameter2, parameter3);
+
+                return executed;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+            
+        }
+        /// <summary>
+        /// tried to get the list of columns names
+        /// </summary>
+        /// <param name="tableTitle"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetFieldNameListOfEntity(string tableTitle)
+        {
+            string query = $"select name from pragma_table_info('{tableTitle}')";
+            return ReadRows(query).AsEnumerable().Select(row => row.Field<string>(0));
+        }
+        /// <summary>
+        /// Get one exact Document from the table-Entity
+        /// </summary>
+        /// <param name="tableTitle"></param>
+        /// <returns></returns>
+        public OrderedDictionary GetDocumentByID(string tableTitle, int id)
+        {
+            string query = $"select * from {tableTitle} where id={id}";
+            OrderedDictionary res = new OrderedDictionary();
+            DataTable dt = ReadRows(query);
+            foreach (DataColumn col in dt.Columns)
+            {
+                res.Add(col.ColumnName, dt.AsEnumerable().Select(row => row.Field<string>(col.ColumnName)).ToList());
+            }
+
+            return res;
         }
 
         public OrderedDictionary GetEntityAllFieldList(string tableTitle)
@@ -197,6 +232,7 @@ namespace Dnevnik
                 }
                 catch (SQLiteException ex)
                 {
+                    success = false;
                     MessageBox.Show(ex.Message);
                 }
                 return success;
@@ -218,6 +254,7 @@ namespace Dnevnik
                 }
                 catch (SQLiteException ex)
                 {
+                    res = 0;
                     MessageBox.Show(ex.Message);
                 }
                 return res;

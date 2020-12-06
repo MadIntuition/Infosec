@@ -20,39 +20,38 @@ namespace Dnevnik
     public partial class CreateInstanceOfEntityWindow : Window
     {   
         Database db;
-        public CreateInstanceOfEntityWindow(Entity entity, string userName)
+        DocumentViewModel docViewModel;
+        private string _tableTitle;
+        public CreateInstanceOfEntityWindow(string tableTitle, string userLogin)
         {
             InitializeComponent();
-            db = new Database(userName);
-            var data = GetList(entity.EntityName);
-
+            db = new Database(userLogin);
+            docViewModel = new DocumentViewModel(userLogin);
+            _tableTitle = tableTitle;
+            var data = docViewModel.GetFieldsList(tableTitle);
             this.FieldsList.ItemsSource = data;
-            
         }
-        
-        public CreateInstanceOfEntityWindow(Document document)
+
+        public CreateInstanceOfEntityWindow(DocumentView document, string userLogin)
         {
             InitializeComponent();
-            //this.FieldsList.ItemsSource = GetList();
-        }
-
-        public List<Field> GetList(string tableName)
-        {
-            //var data = db.GetEntityFieldListNEW(tableName);
-
-            List<Field> dict = new List<Field> 
-            {
-                new Field("field1"), new Field("field2"), new Field("field3"), new Field("field4"), new Field("field5"),
-                new Field("field6"), new Field("field7")
-            };
-            return dict;
+            db = new Database(userLogin);
+            docViewModel = new DocumentViewModel(userLogin);
+            _tableTitle = document.EntityName;
+            var data = docViewModel.GetDocumentByID(document.EntityName, document.DocumentID);
+            this.FieldsList.ItemsSource = data;
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            //this.DialogResult = true;
-        }
+            this.DialogResult = true;
 
+            //var data = docViewModel.GetDocumentsForMainWindow(_tableTitle);
+            //MainWindow mainWindow;
+            //mainWindow.instancesListBox.ItemsSource = data;
+
+        }
+        
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
