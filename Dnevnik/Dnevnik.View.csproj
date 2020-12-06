@@ -80,6 +80,7 @@
     <Compile Include="DataBase_Azat\User.cs" />
     <Compile Include="DataBase_Azat\UsersDatabase.cs" />
     <Compile Include="dontNeed_DataLayer\ApplicationContext.cs" />
+    <Compile Include="Models\DocumentView.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\Person.cs" />

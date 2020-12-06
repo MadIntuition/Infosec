@@ -31,30 +31,49 @@ namespace Dnevnik
         private static string _userLogin;
         ///ApplicationContext db = new ApplicationContext();
         public List<Entity> Entities { get; set; }
+        public List<DocumentView> Documents { get; set; }
         public MainWindow(string userLogin)
         {
             InitializeComponent();
             _userLogin = userLogin;
 
             entityViewModel = new EntitiesViewModel(userLogin);
-            UserLogin.Header = $"хей йо, {userLogin} ";
+            UserLogin.Header = $"Привет, {userLogin}!";
 
             Entities = entityViewModel.GetEntities().ToList();
-            //this.DataContext = entityViewModel;
-            //this.DataContext = Entities;
             this.entitiesListBox.ItemsSource = Entities;
 
             //---------------
-            docViewModel = new DocumentViewModel(userLogin);
+            
+
+            //
             //if (!String.IsNullOrEmpty(entityViewModel.SelectedEntity.EntityName))
             //{
             //    var data = GetList(entityViewModel.SelectedEntity.EntityName);
-            //    this.DataContext = data;
+            
             //    this.instancesListBox.ItemsSource = data;
             //}
                 
         }
+        //вызывается при нажатии на одну из сущностей из списка
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            
+            var item = sender as ListViewItem;
+            if (item != null)// && item.IsSelected)
+            {
+                Entity entity = (Entity)item.Content;
+                //for Adding new Docs
+                docViewModel = new DocumentViewModel(_userLogin, entity.EntityName);
+                this.DataContext = docViewModel;
+                
 
+                var data = docViewModel.GetDocumentsForMainWindow(entity.EntityName);
+                this.instancesListBox.ItemsSource = data;
+            }
+
+            
+        }
 
         private void CreateTypeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -89,5 +108,6 @@ namespace Dnevnik
             };
             return dict;
         }
+
     }
 }

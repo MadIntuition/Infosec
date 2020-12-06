@@ -6,20 +6,6 @@
         xmlns:local="clr-namespace:Dnevnik"
         mc:Ignorable="d"
         Title="Документ" Height="483.943" Width="318.46" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="5" />
-        </Style>
-        <Style TargetType="CheckBox">
-            <Setter Property="Margin" Value="5" />
-        </Style>
-        <Style TargetType="DatePicker">
-            <Setter Property="Margin" Value="5" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="5" />
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
@@ -48,7 +34,7 @@
                   Grid.ColumnSpan="3"  >
             <ListView.View>
                 <GridView>
-                    <GridViewColumn x:Name="FieldsNames" Header="Наименование поля " >
+                    <GridViewColumn x:Name="FieldsNames" Header="Наименование поля " Width="130">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=Title}" TextWrapping="Wrap" Margin="2" 
@@ -59,7 +45,7 @@
                     <GridViewColumn x:Name="FieldsValues" Header="Значение поля" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox  Text="{Binding Path=FValue}" TextWrapping="Wrap" Margin="2" Padding="3"
+                                <TextBox  Text="{Binding Path=FValue}" TextWrapping="Wrap" Margin="2" Padding="3" MinWidth="80"
                                             Foreground="Black" ></TextBox>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

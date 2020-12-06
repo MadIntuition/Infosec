@@ -18,7 +18,7 @@ namespace Dnevnik
         RelayCommand editCommand;
         RelayCommand deleteCommand;
         IEnumerable<Entity> entities;
-        private Entity selectedEntity;
+        private Entity selectedEntity = new Entity();
         private string _userName;
 
         public EntitiesViewModel(string fileName)
@@ -27,20 +27,22 @@ namespace Dnevnik
             //_context = new ApplicationContext(fileName);
             //_context.Entities.Load();
             //Entities = _context.Entities.Local.ToBindingList();
-            db = new Database(fileName + ".sqlite");
+            db = new Database(fileName);
             //SelectedEntity = new Entity("OMG");
         }
+
+
+        public ObservableCollection<Entity> Entities { get; set; }
         
-        
-        public IEnumerable<Entity> Entities
-        {
-            get { return entities; }
-            set
-            {
-                entities = GetEntities();
-                OnPropertyChanged("Entities");
-            }
-        }
+        //public IEnumerable<Entity> Entities
+        //{
+        //    get { return entities; }
+        //    set
+        //    {
+        //        entities = GetEntities();
+        //        OnPropertyChanged("Entities");
+        //    }
+        //}
 
         public Entity SelectedEntity
         {
@@ -61,14 +63,8 @@ namespace Dnevnik
                 };
             }
         }
-        //public IEnumerable<Document> GetDocuments()
-        //{
-        //    foreach (string entity in db.GetEntityFieldList())
-        //    {
-               
-        //    }
-        //}
         
+
 
         // команда добавления
         public RelayCommand AddCommand
@@ -79,7 +75,7 @@ namespace Dnevnik
                   (addCommand = new RelayCommand((o) =>
                   {
                       //это окно для Документа, при помощи которого можно создать новый или отредактировать имеющийся
-                      CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow(SelectedEntity, _userName);
+                      CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow(SelectedEntity.ToString(), _userName);
 
                       if (createInstance.ShowDialog() == true)
                       {

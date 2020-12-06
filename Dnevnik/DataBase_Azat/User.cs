@@ -40,7 +40,7 @@ namespace Dnevnik
 
         public void CreateDatabase()
         {
-            Db = new Database(Login + ".sqlite");
+            Db = new Database(Login);
             Db.CreateFile();
         }
     }

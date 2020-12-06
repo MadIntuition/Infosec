@@ -27,7 +27,7 @@ namespace Dnevnik
         {
             InitializeComponent();
             newEntityFieldsGrid.DataContext = new EntityViewModel();
-            db = new Database(userLogin+".sqlite");
+            db = new Database(userLogin);
         }
 
         // This snippet is much safer in terms of preventing unwanted
@@ -50,7 +50,7 @@ namespace Dnevnik
         {
             List<NewEntity> fieldsCollection = getData().ToList();
             if (fieldsCollection.Count == 0)
-                WarningLabel.Content = "заполни таблицу э";
+                WarningLabel.Content = "Заполните таблицу для полей";
             //MessageBox.Show("заполни таблицу  э", "!", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
@@ -97,7 +97,7 @@ namespace Dnevnik
                 {
                     EntityName.BorderBrush = Brushes.Red;
                     EntityName.BorderThickness = new Thickness(3);
-                    WarningLabel.Content = "название сущности то уж напиши ";
+                    WarningLabel.Content = "Укажите название новой сущности";
 
                 }
                 else
@@ -110,7 +110,7 @@ namespace Dnevnik
                         if  (getImportantFieldsNames().Count() != 0) 
                             CreateNewEntity();
                         else
-                            WarningLabel.Content = "выбери хотяб одно важное поле";
+                            WarningLabel.Content = "Выберите хотя бы одно важное поле";
                     }
                 }
             }
@@ -123,7 +123,7 @@ namespace Dnevnik
 
         private void CreateNewEntity()
         {
-            bool success = db.CreateNewEntity(EntityName.Text, getFieldsNames());//+getImportantFieldsNames()
+            bool success = db.CreateNewEntity(EntityName.Text, getFieldsNames(), getImportantFields());//+getImportantFieldsNames()
             if (success)
             {
                 MessageBox.Show("Успешный успех", "Ура!", MessageBoxButton.OK, MessageBoxImage.Information);

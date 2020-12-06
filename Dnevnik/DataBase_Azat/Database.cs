@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
@@ -20,7 +21,7 @@ namespace Dnevnik
         public Database(string fileName)
         {
             this.fileName = fileName;
-            connectionString = $"Data Source={fileName};Version=3;";
+            connectionString = $"Data Source={fileName}.sqlite;Version=3;";
         }
 
         public void CreateFile()
@@ -28,52 +29,116 @@ namespace Dnevnik
             try
             {
                 SQLiteConnection.CreateFile(fileName);
+                ExecuteFirstQuery();
             }
-            catch(IOException ex)
+            catch (IOException ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
 
-        public bool CreateNewEntity(string tableTitle, IEnumerable<string> fieldsNames)
+        private void ExecuteFirstQuery()
         {
-            string query = "select exists (select 1 from sqlite_master where type='table' and name=@name)";
-            SQLiteParameter parameter = new SQLiteParameter("@name", tableTitle);
-
-            bool exists = Convert.ToBoolean(ExecuteScalar(query, parameter));
-            if (exists)
-                return false;
-
-            query = "create table " + tableTitle + " (id integer primary key autoincrement, " + string.Join(", ", fieldsNames.Select(x => x + " text")) + ")";
-            return ExecuteNonQuery(query) >= 0;
+            string query = "create table tablesInfo (name text primary key, annotationFields text not null)";
+            ExecuteNonQuery(query);
         }
 
-        public DataTable GetEntityFieldList(string tableTitle, int[] annotationFields)
+        public bool CreateNewEntity(string tableTitle, IEnumerable<string> fieldsNames, bool[] annotationFields)
         {
-            string query = "select * from " + tableTitle;
-            return ReadRows(query, annotationFields);
+            try
+            {
+                string query = $"select exists (select * from tablesInfo where name=@name)";
+                SQLiteParameter parameter = new SQLiteParameter("@name", tableTitle);
+
+                bool exists = Convert.ToBoolean(ExecuteScalar(query, parameter));
+                if (exists)
+                    return false;
+
+                query = $"create table {tableTitle} (id integer primary key autoincrement, " + string.Join(", ", fieldsNames.Select(x => x + " text")) + ")";
+                bool executed = ExecuteNonQuery(query);
+                string annotationFieldsMask = "";
+                for (int i = 0; i < annotationFields.Length; i++)
+                {
+                    annotationFieldsMask += annotationFields[i] ? '1' : '0';
+                }
+                query = $"insert into tablesInfo (name, annotationFields) values (@name, @annotationFields)";
+                SQLiteParameter parameter2 = new SQLiteParameter("@name", tableTitle);
+                SQLiteParameter parameter3 = new SQLiteParameter("@annotationFields", annotationFieldsMask);
+                executed = ExecuteNonQuery(query, parameter2, parameter3);
+
+                return executed;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+            
         }
         /// <summary>
-        /// tried to get the list
+        /// tried to get the list of columns names
         /// </summary>
         /// <param name="tableTitle"></param>
         /// <returns></returns>
-        public object GetEntityFieldListNEW(string tableTitle)
+        public IEnumerable<string> GetFieldNameListOfEntity(string tableTitle)
         {
             string query = $"select name from pragma_table_info('{tableTitle}')";
-            var data = ExecuteScalar(query);
-            return data;
+            return ReadRows(query).AsEnumerable().Select(row => row.Field<string>(0));
         }
-        
+        /// <summary>
+        /// Get one exact Document from the table-Entity
+        /// </summary>
+        /// <param name="tableTitle"></param>
+        /// <returns></returns>
+        public OrderedDictionary GetDocumentByID(string tableTitle, int id)
+        {
+            string query = $"select * from {tableTitle} where id={id}";
+            OrderedDictionary res = new OrderedDictionary();
+            DataTable dt = ReadRows(query);
+            foreach (DataColumn col in dt.Columns)
+            {
+                res.Add(col.ColumnName, dt.AsEnumerable().Select(row => row.Field<string>(col.ColumnName)).ToList());
+            }
+
+            return res;
+        }
+
+        public OrderedDictionary GetEntityAllFieldList(string tableTitle)
+        {
+            string query = $"select * from {tableTitle}";
+            OrderedDictionary res = new OrderedDictionary();
+            DataTable dt = ReadRows(query);
+            foreach (DataColumn col in dt.Columns)
+            {
+                res.Add(col.ColumnName, dt.AsEnumerable().Select(row => row.Field<string>(col.ColumnName)).ToList());
+            }
+
+            return res;
+        }
+
+        public OrderedDictionary GetEntityAnnotationFieldList(string tableTitle)
+        {
+            string query = "select annotationFields from tablesInfo where name=@name";
+            SQLiteParameter parameter = new SQLiteParameter("@name", tableTitle);
+            string annotationField = Convert.ToString(ExecuteScalar(query, parameter));
+
+            query = $"select * from {tableTitle}";
+            OrderedDictionary res = new OrderedDictionary();
+            DataTable dt = ReadRows(query, annotationField);
+            foreach (DataColumn col in dt.Columns)
+            {
+                res.Add(col.ColumnName, dt.AsEnumerable().Select(row => row.Field<string>(col.ColumnName)).ToList());
+            }
+
+            return res;
+        }
 
         public IEnumerable<string> GetEntities()
         {
-            //string query = "select * from sqlite_master where type='table'";
-            string query = "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'";
-            return ReadRows(query, 0).AsEnumerable().Select(row => row.Field<string>(0));
+            string query = "select name from tablesInfo";
+            return ReadRows(query).AsEnumerable().Select(row => row.Field<string>(0));
         }
 
-        private DataTable ReadRows(string query, params int[] annotationFields)
+        private DataTable ReadRows(string query, string annotationFieldsMask = null)
         {
             DataTable table = new DataTable();
 
@@ -88,27 +153,24 @@ namespace Dnevnik
                     {
                         if (reader.HasRows)
                         {
-                            for (int i = 0; i < annotationFields.Length; i++)
+                            table.Columns.Add(reader.GetName(0));
+
+                            for (int i = 1; i < reader.FieldCount; i++)
                             {
-                                int colNum = annotationFields[i];
-                                if (colNum >= reader.FieldCount)
-                                    throw new ArgumentOutOfRangeException();
-                                DataColumn column = new DataColumn(reader.GetName(colNum), reader.GetFieldType(colNum));
-                                table.Columns.Add(column);
+                                if (annotationFieldsMask == null || annotationFieldsMask[i - 1] == '1')
+                                {
+                                    table.Columns.Add(reader.GetName(i));
+                                }
                             }
                         }
+
+                        object[] values = new object[reader.FieldCount];
 
                         while (reader.Read())
                         {
                             DataRow row = table.NewRow();
-                            for (int i = 0; i < annotationFields.Length; i++)
-                            {
-                                int colNum = annotationFields[i];
-                                string name = reader.GetName(colNum);
-                                object value = reader.GetValue(colNum);
-                                row[name] = value;
-                            }
-
+                            reader.GetValues(values);
+                            row.ItemArray = values.Where((x, i) => i == 0 || annotationFieldsMask == null || (i > 0 && annotationFieldsMask[i - 1] == '1')).ToArray();
                             table.Rows.Add(row);
                         }
                     }
@@ -122,21 +184,21 @@ namespace Dnevnik
             }
         }
 
-        public bool AddDocument(string table, Document doc)
+        public bool AddDocument(string tableTitle, Document doc)
         {
-            string query = "insert into " + table + " (" + string.Join(", ", doc.Fields.Keys.Cast<string>()) + ") values (" + string.Join(", ", Enumerable.Repeat("?", doc.Fields.Count)) + ")";
+            string query = $"insert into {tableTitle} (" + string.Join(", ", doc.Fields.Keys.Cast<string>()) + ") values (" + string.Join(", ", Enumerable.Repeat("?", doc.Fields.Count)) + ")";
             SQLiteParameter[] parameters = new SQLiteParameter[doc.Fields.Count];
 
             for (int i = 0; i < parameters.Length; i++)
             {
                 parameters[i] = new SQLiteParameter(DbType.String, doc.Fields[i]);
             }
-            return ExecuteNonQuery(query, parameters) > 0;
+            return ExecuteNonQuery(query, parameters);
         }
 
-        public bool EditDocument(string table, int id, Document doc)
+        public bool EditDocument(string tableTitle, int id, Document doc)
         {
-            string query = "update " + table + " set " + string.Join(", ", doc.Fields.Keys.Cast<string>().Select(x => x + "=?")) + " where id=@id";
+            string query = $"update {tableTitle} set " + string.Join(", ", doc.Fields.Keys.Cast<string>().Select(x => x + "=?")) + " where id=@id";
             SQLiteParameter[] parameters = new SQLiteParameter[doc.Fields.Count + 1];
 
             parameters[0] = new SQLiteParameter("@id", id);
@@ -144,19 +206,19 @@ namespace Dnevnik
             {
                 parameters[i] = new SQLiteParameter(DbType.String, doc.Fields[i - 1]);
             }
-            return ExecuteNonQuery(query, parameters) > 0;
+            return ExecuteNonQuery(query, parameters);
         }
 
-        public bool DeleteDocument(string table, int id)
+        public bool DeleteDocument(string tableTitle, int id)
         {
-            string query = "delete from " + table + " where id=@id";
+            string query = $"delete from {tableTitle} where id=@id";
             SQLiteParameter parameter = new SQLiteParameter("@id", id);
-            return ExecuteNonQuery(query, parameter) > 0;
+            return ExecuteNonQuery(query, parameter);
         }
 
-        private int ExecuteNonQuery(string query, params SQLiteParameter[] parameters)
+        private bool ExecuteNonQuery(string query, params SQLiteParameter[] parameters)
         {
-            int res = 0;
+            bool success = false;
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             using (SQLiteCommand command = new SQLiteCommand(query, connection))
             {
@@ -165,13 +227,15 @@ namespace Dnevnik
                     connection.Open();
                     command.Parameters.AddRange(parameters);
                     //MessageBox.Show(command.CommandText.ToString());
-                    res = command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
+                    success = true;
                 }
                 catch (SQLiteException ex)
                 {
+                    success = false;
                     MessageBox.Show(ex.Message);
                 }
-                return res;
+                return success;
             }
         }
 
@@ -190,6 +254,7 @@ namespace Dnevnik
                 }
                 catch (SQLiteException ex)
                 {
+                    res = 0;
                     MessageBox.Show(ex.Message);
                 }
                 return res;

@@ -18,5 +18,10 @@ namespace Dnevnik
             Fields = new OrderedDictionary();
             AnnotationFields = annotationFields;
         }
+
+        public Document(OrderedDictionary dictionary)
+        {
+            Fields = dictionary;
+        }
     }
 }

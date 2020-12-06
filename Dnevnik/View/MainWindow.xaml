@@ -38,7 +38,6 @@
                 <MenuItem Header="1" ></MenuItem>
                 <MenuItem Header="2" >
                     <MenuItem Header="3"></MenuItem>
-                    <MenuItem Header="4" ></MenuItem>
                 </MenuItem>
                 <Separator />
                 <MenuItem x:Name="ExitMenuItem" Header="Exit" Click="ExitMenuItem_Click" ></MenuItem>
@@ -59,7 +58,7 @@
 
         <!--Body-->
         <!--Left ListBox for Types-->
-        <ListBox x:Name="entitiesListBox" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" 
+        <!--<ListBox x:Name="entitiesListBox" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" 
                  SelectedItem="{Binding SelectedEntity}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -68,8 +67,28 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListBox>-->
 
+        <ListView x:Name="entitiesListBox" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" 
+                 SelectedItem="{Binding SelectedEntity}">
+            <ListView.View>
+                <GridView x:Name="EntityGridView" >
+                    <GridViewColumn Header="Список сущностей">
+                        <GridViewColumn.CellTemplate >
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=EntityName}" TextWrapping="Wrap" Margin="2" 
+                                            Foreground="Black" ></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
 
         <!--Right ListBox for SubTypes SelectedItem="{Binding SelectedPhone}"-->
         <ListBox Grid.Column="3" Grid.Row="3" Grid.RowSpan="1" Grid.ColumnSpan="4" 
@@ -85,19 +104,19 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical" >
-                        <!--<TextBlock FontSize="18" Margin="20, 0" Text="{Binding EntityName}"/>-->
-                        <TextBlock FontSize="18" Margin="20, 0" Text="{Binding Title}" />
+                        <TextBlock FontSize="18" Margin="20, 0" Text="{Binding AnnotationFields, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
         <StackPanel Grid.Column="3" Grid.ColumnSpan="4" Grid.Row="4" Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
-            <Button Content="Добавить" Padding="20,0" Margin="20,0" Command="{Binding AddCommand}" Background="#FF00FF8B"  />
-            <Button Content="Изменить" Padding="20,0" Margin="20,0" Command="{Binding EditCommand}"
-                    CommandParameter="{Binding ElementName=instancesList, Path=SelectedItem}" Background="#FF96CFFF"  />
-            <Button Content="Удалить" Padding="20,0" Margin="20,0" Command="{Binding DeleteCommand}"
-                    CommandParameter="{Binding ElementName=instancesList, Path=SelectedItem}" Background="#FFFFA669"  />
+            <!--<Button x:Name="add_doc_button" Content="Добавить" Padding="20,0" Margin="20,0" Background="#FF00FF8B" />-->
+            <Button Content="Добавить" Padding="20,0" Margin="10,0" Width="100" Command="{Binding AddCommand}" Background="#FF00D11C"/>
+            <Button Content="Изменить" Padding="10,0" Margin="20,0" Width="100" Command="{Binding EditCommand}"
+                    CommandParameter="{Binding ElementName=instancesList, Path=SelectedDocument}" Background="#FF96CFFF"  />
+            <Button Content="Удалить" Padding="10,0" Margin="20,0" Width="100" Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding ElementName=instancesList, Path=SelectedDocument}" Background="#FFFF6F4F"  />
         </StackPanel>
         <!--Footer-->
         <Button x:Name="createTypeButton" Grid.Column="1" Grid.Row="4" 
