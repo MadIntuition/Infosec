@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
@@ -25,13 +26,17 @@ namespace Dnevnik
     /// </summary>
     public partial class MainWindow : Window
     {
+        ObservableCollection<DocumentView> _data;
         //Database db;
         EntitiesViewModel entityViewModel;
         DocumentViewModel docViewModel;
         private static string _userLogin;
-        ///ApplicationContext db = new ApplicationContext();
+        //ApplicationContext db = new ApplicationContext();
+
         public List<Entity> Entities { get; set; }
         public List<DocumentView> Documents { get; set; }
+        //public ObservableCollection<DocumentView> data { get; set; }
+
         public MainWindow(string userLogin)
         {
             InitializeComponent();
@@ -44,35 +49,39 @@ namespace Dnevnik
             this.entitiesListBox.ItemsSource = Entities;
 
             //---------------
-            
-
+            //data = new ObservableCollection<DocumentView>();
+            //this.instancesListBox.ItemsSource = data;
             //
             //if (!String.IsNullOrEmpty(entityViewModel.SelectedEntity.EntityName))
             //{
             //    var data = GetList(entityViewModel.SelectedEntity.EntityName);
-            
+
             //    this.instancesListBox.ItemsSource = data;
             //}
-                
+
         }
+                
         //вызывается при нажатии на одну из сущностей из списка
         private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            
+        {            
             var item = sender as ListViewItem;
             if (item != null)// && item.IsSelected)
             {
                 Entity entity = (Entity)item.Content;
-                //for Adding new Docs
-                docViewModel = new DocumentViewModel(_userLogin, entity.EntityName);
-                this.DataContext = docViewModel;
-                
 
-                var data = docViewModel.GetDocumentsForMainWindow(entity.EntityName);
-                this.instancesListBox.ItemsSource = data;
-            }
+                UpdateMainWindow(entity);
+            }            
+        }
 
-            
+        public void UpdateMainWindow(Entity entity)
+        {
+            //for Adding new Docs
+            docViewModel = new DocumentViewModel(_userLogin, this, entity.EntityName);
+            this.DataContext = docViewModel;
+
+            //data = docViewModel.GetDocumentsForMainWindow(entity.EntityName);
+            this.instancesListBox.ItemsSource = docViewModel.GetDocumentsForMainWindow(entity.EntityName);
+
         }
 
         private void CreateTypeButton_Click(object sender, RoutedEventArgs e)

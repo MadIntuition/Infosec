@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data.Entity;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Dnevnik
 {
@@ -22,25 +24,17 @@ namespace Dnevnik
         private string _userLogin;
         private string _selectedEntity;
         EntitiesViewModel entitiesViewModel;
+        private ObservableCollection<DocumentView> _data;
+        MainWindow _mainWindow;
 
-
-        public DocumentViewModel(string userLogin, string selectedEntity = "")
+        public DocumentViewModel(string userLogin, MainWindow mainWindow = null, string selectedEntity = "")
         {
             db = new Database(userLogin);
             _userLogin = userLogin;
             _selectedEntity = selectedEntity;
             entitiesViewModel = new EntitiesViewModel(userLogin);
+            _mainWindow = mainWindow;
         }
-
-        //public IEnumerable<Document> Documents
-        //{
-        //    get { return documents; }
-        //    set
-        //    {
-        //        documents = value;
-        //        OnPropertyChanged("Documents");
-        //    }
-        //}
 
         public DocumentView SelectedDocument
         {
@@ -51,6 +45,15 @@ namespace Dnevnik
                 OnPropertyChanged("SelectedDocument");
             }
         }
+        //public ObservableCollection<DocumentView> Data
+        //{
+        //    get { return _data; }
+        //    set
+        //    {
+        //        _data = value;
+        //        OnPropertyChanged("AnnotationFields");
+        //    }
+        //}
         public IEnumerable<Entity> GetEntities()
         {
             foreach (string entity in db.GetEntities())
@@ -67,9 +70,9 @@ namespace Dnevnik
         /// </summary>
         /// <param name="tableTitle">name of the table = Entity</param>
         /// <returns></returns>
-        public List<DocumentView> GetDocumentsForMainWindow(string tableTitle)
-        { 
-            List<DocumentView> list = new List<DocumentView>();
+        public ObservableCollection<DocumentView> GetDocumentsForMainWindow(string tableTitle)
+        {
+            ObservableCollection<DocumentView> list = new ObservableCollection<DocumentView>();
             
             //TODO: need to test and finish
             var docs = db.GetEntityAnnotationFieldList(tableTitle);
@@ -179,7 +182,9 @@ namespace Dnevnik
                           Document document = new Document(dic);
 
                           db.AddDocument(_selectedEntity, document);
+
                       }
+                      _mainWindow.instancesListBox.ItemsSource = GetDocumentsForMainWindow(_selectedEntity);
                   }));
             }
         }
@@ -212,26 +217,7 @@ namespace Dnevnik
 
                           db.EditDocument(_selectedEntity, SelectedDocument.DocumentID, document);
                       }
-
-                      //if (createInstance.ShowDialog() == true)
-                      //{
-                      //    //document.Fields = 
-                      //    // получаем измененный объект
-                      //    person = db.People.Find(createInstance.Person.ID_Person);
-                      //    //person = db.People.FirstOrDefault(i => i.ID_Person == createInstance.Person.ID_Person );
-                      //    if (person != null)
-                      //    {
-                      //        person.FirstName = createInstance.Person.FirstName;
-                      //        person.LastName = createInstance.Person.LastName;
-                      //        person.DateOfBirth = createInstance.Person.DateOfBirth;
-                      //        person.Address = createInstance.Person.Address;
-                      //        person.EyeColor = createInstance.Person.EyeColor;
-                      //        person.Telephone = createInstance.Person.Telephone;
-
-                      //        db.Entry(person).State = EntityState.Modified;
-                      //        db.SaveChanges();
-                      //    }
-                      //}
+                      _mainWindow.instancesListBox.ItemsSource = GetDocumentsForMainWindow(_selectedEntity);
                   }));
             }
         }
@@ -241,15 +227,14 @@ namespace Dnevnik
             get
             {
                 return deleteCommand ??
-                  (deleteCommand = new RelayCommand((selectedItem) =>
+                  (deleteCommand = new RelayCommand((o) =>
                   {
                       // если ни одного объекта не выделено, выходим
-                      if (selectedItem == null) return;
-                      // получаем выделенный объект
+                      if (SelectedDocument == null) return;
 
-                      //Person person = selectedItem as Person;
-                      //db.People.Remove(person);
-                      //db.SaveChanges();
+                      db.DeleteDocument(SelectedDocument.EntityName, SelectedDocument.DocumentID);
+                      _mainWindow.instancesListBox.ItemsSource = GetDocumentsForMainWindow(_selectedEntity);
+                      MessageBox.Show("Элемент успешно удален. Обновите списочек", "поздравляю", MessageBoxButton.OK, MessageBoxImage.Information);
                   }));
             }
         }
