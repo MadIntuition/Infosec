@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dnevnik"
         mc:Ignorable="d"
-        Title="Dnevnik - Main" Height="574.415" Width="700" WindowStartupLocation="CenterScreen">
+        Title="Главное окно" Height="574.415" Width="700" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
@@ -34,27 +34,23 @@
                     <DockPanel HorizontalAlignment="Stretch"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
-            <MenuItem Header="File">
-                <MenuItem Header="1" ></MenuItem>
-                <MenuItem Header="2" >
-                    <MenuItem Header="3"></MenuItem>
-                </MenuItem>
+            <MenuItem Header="Меню">
+                <MenuItem x:Name="LoginMenuItem" Header="Войти под другим логином" Click="LoginMenuItem_Click" ></MenuItem>
                 <Separator />
-                <MenuItem x:Name="ExitMenuItem" Header="Exit" Click="ExitMenuItem_Click" ></MenuItem>
+                <MenuItem x:Name="ExitMenuItem" Header="Выход" Click="ExitMenuItem_Click" ></MenuItem>
             </MenuItem>
-            <MenuItem x:Name="LoginMenuItem" Header="Login" Click="LoginMenuItem_Click" ></MenuItem>
             <MenuItem x:Name="UserLogin" Header="" Margin="5,0" HorizontalAlignment="Right"/>
         </Menu>
 
 
-        <Button x:Name="findButton" Grid.Column="6" Grid.Row="1" 
+        <!--<Button x:Name="findButton" Grid.Column="6" Grid.Row="1" 
                 Margin="0, 5" Padding="5" Content="Поиск"/>
-        <!--<Button x:Name="createSubTypeButton" Grid.Column="6" Grid.Row="2" 
-                Margin="0, 0, 0, 5" Padding="5" Content="Создать подтип" Command="{Binding AddCommand}" />-->
+        --><!--<Button x:Name="createSubTypeButton" Grid.Column="6" Grid.Row="2" 
+                Margin="0, 0, 0, 5" Padding="5" Content="Создать подтип" Command="{Binding AddCommand}" />--><!--
         <TextBlock Grid.Column="3" Grid.Row="1" 
                    Margin="0, 10" Text="Найти:"/>
         <TextBox x:Name="searchingTextBox" Grid.Column="5" Grid.Row="1"
-                 Margin="10, 5"/>
+                 Margin="10, 5"/>-->
 
         <!--Body-->
         <!--Left ListBox for Types-->

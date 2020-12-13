@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dnevnik"
         mc:Ignorable="d"
-        Title="Create New Entity" Height="449.969" Width="331.867" WindowStartupLocation="CenterScreen">
+        Title="Создавть новую сущность" Height="449.969" Width="331.867" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -24,7 +24,7 @@
         <TextBlock Grid.Row="2" Grid.Column="1" Text="Введите названия полей:"/>
         <Label x:Name="WarningLabel" Grid.Row="0" Grid.Column="1" FontSize="14" Foreground="#FFFF1700" FontFamily="Calibri"/>
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="Введите название сущности:"/>
-        <TextBox x:Name="EntityName" Grid.Row="1" Grid.Column="1" Margin="166,0,0,5"  ></TextBox>
+        <TextBox x:Name="EntityNameTextBox" Grid.Row="1" Grid.Column="1" Margin="166,0,0,5"  ></TextBox>
 
         <DataGrid x:Name="newEntityFieldsGrid" Grid.Row="3" Grid.Column="1"  AutoGenerateColumns="True" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" 
           ItemsSource="{Binding Entity}" Margin="0,5">
