@@ -91,10 +91,10 @@
 
         <Button x:Name="registrationButton" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="3" 
                 Content="Зарегистрироваться" Margin="0,5"
-                Background="Green" Click="RegistrationButton_Click"/>
+                Background="#FF6AFF6A" Click="RegistrationButton_Click"/>
         <Button x:Name="CancelButton" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="3"
                 Content="Отмена" Margin="0,5"
-                Background="Red" Click="CancelButton_Click" />
+                Background="#FFFF5E5E" Click="CancelButton_Click" />
         
     </Grid>
 </Window>

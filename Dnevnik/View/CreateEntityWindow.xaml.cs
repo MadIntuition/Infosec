@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,6 +47,9 @@ namespace Dnevnik
 
             return Entities;
         }
+
+        
+
         public IEnumerable<string> getFieldsNames()
         {
             List<NewEntity> fieldsCollection = getData().ToList();
@@ -56,7 +60,10 @@ namespace Dnevnik
             {
                 foreach (var field in fieldsCollection)
                 {
-                    yield return field.FieldName;
+                    if (Validation.IsValid(field.FieldName))
+                        yield return field.FieldName;
+                    else
+                        throw new Exception("Название не валидно. Можно использовать только латинские буквы, цифры и нижнее подчеркивание");
                 }
             }
             
@@ -92,19 +99,21 @@ namespace Dnevnik
         private void CreateEntity_Click(object sender, RoutedEventArgs e)
         {
             try
-            {
-                if (String.IsNullOrEmpty(EntityName.Text))
+            {               
+                if (String.IsNullOrEmpty(EntityNameTextBox.Text))
                 {
-                    EntityName.BorderBrush = Brushes.Red;
-                    EntityName.BorderThickness = new Thickness(3);
+                    EntityNameTextBox.BorderBrush = Brushes.Red;
+                    EntityNameTextBox.BorderThickness = new Thickness(3);
                     WarningLabel.Content = "Укажите название новой сущности";
 
                 }
                 else
                 {
+                    if (!Validation.IsValid(EntityNameTextBox.Text))
+                        throw new Exception("Имя таблицы не валидно. Можно использовать только латинские буквы, цифры и нижнее подчеркивание");
                     WarningLabel.Content = "";
-                    EntityName.BorderThickness = new Thickness(1);
-                    EntityName.BorderBrush = Brushes.Gray;
+                    EntityNameTextBox.BorderThickness = new Thickness(1);
+                    EntityNameTextBox.BorderBrush = Brushes.Gray;
                     if (getFieldsNames().Count() != 0)
                     {
                         if  (getImportantFieldsNames().Count() != 0) 
@@ -114,24 +123,31 @@ namespace Dnevnik
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("што-то пошло не так", "не ура", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(ex.Message, "не ура", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             
         }
 
         private void CreateNewEntity()
         {
-            bool success = db.CreateNewEntity(EntityName.Text, getFieldsNames(), getImportantFields());//+getImportantFieldsNames()
-            if (success)
+            try
             {
-                MessageBox.Show("Успешный успех", "Ура!", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
+                bool success = db.CreateNewEntity(EntityNameTextBox.Text, getFieldsNames(), getImportantFields());//+getImportantFieldsNames()
+                if (success)
+                {
+                    MessageBox.Show("Успешный успех", "Ура!", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("што-то пошло не так", "не ура", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("што-то пошло не так", "не ура", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(ex.Message, "не ура", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

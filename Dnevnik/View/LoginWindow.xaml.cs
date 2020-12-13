@@ -58,7 +58,6 @@ namespace Dnevnik
                     warningLabel.Content = "Неверный логин или пароль.";
                     warningLabel.FontSize = 12;
                     warningLabel.Visibility = Visibility.Visible;
-                    //MessageBox.Show("Неверный логин или пароль. Попробуйте снова.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch(Exception ex)

@@ -167,24 +167,33 @@ namespace Dnevnik
                 return addCommand ??
                   (addCommand = new RelayCommand((o) =>
                   {
-                      //это окно для Документа, при помощи которого можно создать новый или отредактировать имеющийся
-                      CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow(_selectedEntity, _userLogin);
-
-                      if (createInstance.ShowDialog() == true)
+                      try
                       {
-                          List<Field> list = createInstance.FieldsList.ItemsSource as List<Field>;
-                          OrderedDictionary dic = new OrderedDictionary();
+                          //это окно для Документа, при помощи которого можно создать новый или отредактировать имеющийся
+                          CreateInstanceOfEntityWindow createInstance = new CreateInstanceOfEntityWindow(_selectedEntity, _userLogin);
 
-                          foreach(Field field in list)
+                          if (createInstance.ShowDialog() == true)
                           {
-                              dic.Add(field.Title, field.FValue);
-                          }
-                          Document document = new Document(dic);
+                              List<Field> list = createInstance.FieldsList.ItemsSource as List<Field>;
+                              OrderedDictionary dic = new OrderedDictionary();
 
-                          db.AddDocument(_selectedEntity, document);
+                              foreach (Field field in list)
+                              {
+                                  //if (!Validation.IsValid(field.FValue))
+                                  //    throw new Exception("В качестве зна");
+                                  dic.Add(field.Title, field.FValue);
+                              }
+                              Document document = new Document(dic);
+
+                              db.AddDocument(_selectedEntity, document);
+
+                          }
+                          _mainWindow.instancesListBox.ItemsSource = GetDocumentsForMainWindow(_selectedEntity);
+                      }
+                      catch (Exception ex)
+                      {
 
                       }
-                      _mainWindow.instancesListBox.ItemsSource = GetDocumentsForMainWindow(_selectedEntity);
                   }));
             }
         }
