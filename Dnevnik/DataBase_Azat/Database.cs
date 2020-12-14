@@ -45,34 +45,29 @@ namespace Dnevnik
 
         public bool CreateNewEntity(string tableTitle, IEnumerable<string> fieldsNames, bool[] annotationFields)
         {
-            try
-            {
-                string query = $"select exists (select * from tablesInfo where name=@name)";
-                SQLiteParameter parameter = new SQLiteParameter("@name", tableTitle);
+            string query = $"select exists (select 1 from tablesInfo where name=@name)";
+            SQLiteParameter parameter1 = new SQLiteParameter("@name", tableTitle);
 
-                bool exists = Convert.ToBoolean(ExecuteScalar(query, parameter));
-                if (exists)
-                    return false;
-
-                query = $"create table {tableTitle} (id integer primary key autoincrement, " + string.Join(", ", fieldsNames.Select(x => x + " text")) + ")";
-                bool executed = ExecuteNonQuery(query);
-                string annotationFieldsMask = "";
-                for (int i = 0; i < annotationFields.Length; i++)
-                {
-                    annotationFieldsMask += annotationFields[i] ? '1' : '0';
-                }
-                query = $"insert into tablesInfo (name, annotationFields) values (@name, @annotationFields)";
-                SQLiteParameter parameter2 = new SQLiteParameter("@name", tableTitle);
-                SQLiteParameter parameter3 = new SQLiteParameter("@annotationFields", annotationFieldsMask);
-                executed = ExecuteNonQuery(query, parameter2, parameter3);
-
-                return executed;
-            }
-            catch(Exception ex)
-            {
+            object res = ExecuteScalar(query, parameter1);
+            if (res == null || Convert.ToBoolean(res))
                 return false;
-            }
+
+            query = $"create table \"{tableTitle}\" (id integer primary key autoincrement, " + string.Join(", ", fieldsNames.Select(x => $"\"{x}\" text")) + ")";
             
+            if (!ExecuteNonQuery(query))
+                return false;
+
+            string annotationFieldsMask = "";
+            for (int i = 0; i < annotationFields.Length; i++)
+            {
+                annotationFieldsMask += annotationFields[i] ? '1' : '0';
+            }
+            query = $"insert into tablesInfo (name, annotationFields) values (@name, @annotationFields)";
+            SQLiteParameter parameter2 = new SQLiteParameter("@annotationFields", annotationFieldsMask);
+
+            ExecuteNonQuery(query, parameter1, parameter2);
+
+            return true;
         }
         /// <summary>
         /// tried to get the list of columns names
@@ -91,7 +86,7 @@ namespace Dnevnik
         /// <returns></returns>
         public OrderedDictionary GetDocumentByID(string tableTitle, int id)
         {
-            string query = $"select * from {tableTitle} where id={id}";
+            string query = $"select * from \"{tableTitle}\" where id={id}";
             OrderedDictionary res = new OrderedDictionary();
             DataTable dt = ReadRows(query);
             foreach (DataColumn col in dt.Columns)
@@ -104,7 +99,7 @@ namespace Dnevnik
 
         public OrderedDictionary GetEntityAllFieldList(string tableTitle)
         {
-            string query = $"select * from {tableTitle}";
+            string query = $"select * from \"{tableTitle}\"";
             OrderedDictionary res = new OrderedDictionary();
             DataTable dt = ReadRows(query);
             foreach (DataColumn col in dt.Columns)
@@ -119,11 +114,12 @@ namespace Dnevnik
         {
             string query = "select annotationFields from tablesInfo where name=@name";
             SQLiteParameter parameter = new SQLiteParameter("@name", tableTitle);
-            string annotationField = Convert.ToString(ExecuteScalar(query, parameter));
+            string annotationFields = Convert.ToString(ExecuteScalar(query, parameter));
 
-            query = $"select * from {tableTitle}";
+            query = $"select * from \"{tableTitle}\"";
+            DataTable dt = ReadRows(query, annotationFields);
+
             OrderedDictionary res = new OrderedDictionary();
-            DataTable dt = ReadRows(query, annotationField);
             foreach (DataColumn col in dt.Columns)
             {
                 res.Add(col.ColumnName, dt.AsEnumerable().Select(row => row.Field<string>(col.ColumnName)).ToList());
@@ -186,7 +182,7 @@ namespace Dnevnik
 
         public bool AddDocument(string tableTitle, Document doc)
         {
-            string query = $"insert into {tableTitle} (" + string.Join(", ", doc.Fields.Keys.Cast<string>()) + ") values (" + string.Join(", ", Enumerable.Repeat("?", doc.Fields.Count)) + ")";
+            string query = $"insert into \"{tableTitle}\" (" + string.Join(", ", doc.Fields.Keys.Cast<string>().Select(x => $"\"{x}\"")) + ") values (" + string.Join(", ", Enumerable.Repeat("?", doc.Fields.Count)) + ")";
             SQLiteParameter[] parameters = new SQLiteParameter[doc.Fields.Count];
 
             for (int i = 0; i < parameters.Length; i++)
@@ -198,7 +194,7 @@ namespace Dnevnik
 
         public bool EditDocument(string tableTitle, int id, Document doc)
         {
-            string query = $"update {tableTitle} set " + string.Join(", ", doc.Fields.Keys.Cast<string>().Select(x => x + "=?")) + " where id=@id";
+            string query = $"update \"{tableTitle}\" set " + string.Join(", ", doc.Fields.Keys.Cast<string>().Select(x => $"\"{x}\"=?")) + " where id=@id";
             SQLiteParameter[] parameters = new SQLiteParameter[doc.Fields.Count + 1];
 
             parameters[0] = new SQLiteParameter("@id", id);
@@ -211,7 +207,7 @@ namespace Dnevnik
 
         public bool DeleteDocument(string tableTitle, int id)
         {
-            string query = $"delete from {tableTitle} where id=@id";
+            string query = $"delete from \"{tableTitle}\" where id=@id";
             SQLiteParameter parameter = new SQLiteParameter("@id", id);
             return ExecuteNonQuery(query, parameter);
         }
